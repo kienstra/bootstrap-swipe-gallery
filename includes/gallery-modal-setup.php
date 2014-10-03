@@ -51,7 +51,7 @@ function bsg_maybe_make_carousel_of_post_images() {
 
 function bsg_echo_carousel_of_all_post_images() {
   global $post ; 
-  if ( is_single( $post->ID ) ) {
+  if ( is_single( $post->ID ) || is_page( $post->ID ) ) {
     $image_ids = bsg_get_image_ids() ;
     create_and_echo_modal_carousel( $image_ids , 'non-gallery' ) ;    
   }
