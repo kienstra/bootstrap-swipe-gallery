@@ -75,5 +75,3 @@ function bsg_get_image_ids() {
   }
   return $image_ids ; 
 }
-
-

@@ -5,11 +5,10 @@ Plugin Name: Bootstrap Swipe Gallery
 Plugin URI: www.ryankienstra.com/swipe-gallery
 Description: Swipe through gallery images on touch devices. Image sizes adjust to screen size. Must have Twitter Bootstrap 3. 
 
-Version: 1.0.1
+Version: 1.0.2
 Author: Ryan Kienstra
 Author URI: www.ryankienstra.com
 License: GPL2
-
 */
 
 if ( ! defined( 'WPINC' )  ) {
@@ -17,7 +16,7 @@ if ( ! defined( 'WPINC' )  ) {
 }
 
 define( 'BSG_PLUGIN_SLUG' , 'bootstrap-swipe-gallery' ) ;
-define( 'BSG_PLUGIN_VERSION' , '1.0.1' ) ; 
+define( 'BSG_PLUGIN_VERSION' , '1.0.2' ) ; 
 
 register_activation_hook( __FILE__ , 'bsg_deactivate_if_early_wordpress_version' ) ;
 function bsg_deactivate_if_early_wordpress_version() {
@@ -35,7 +34,6 @@ add_action( 'plugins_loaded' , 'bsg_text_domain' ) ;
 function bsg_text_domain() {
   load_plugin_textdomain( 'bootstrap-swipe-gallery' ) ; 
 }
-
 
 add_action( 'plugins_loaded' , 'bsg_get_required_files' ) ;
 function bsg_get_required_files() {
@@ -74,7 +72,6 @@ function bsg_post_has_a_gallery( $post ) {
 }
 
 function bsg_do_make_carousel_of_post_images() {
-  global $post ;  
   return ( bsg_is_single_post_or_page() && bsg_options_allow_carousel_for_all_post_images() && bsg_post_has_attached_images() ) ;
 }
 
@@ -88,7 +85,7 @@ function bsg_is_single_post_or_page() {
 function bsg_options_allow_carousel_for_all_post_images() {
   $plugin_options = get_option( 'bsg_plugin_options' ) ;
   $all_posts_option = ( isset( $plugin_options[ 'bsg_allow_carousel_for_all_post_images' ] ) ) ?
-  $plugin_options[ 'bsg_allow_carousel_for_all_post_images' ] : false ;
+    $plugin_options[ 'bsg_allow_carousel_for_all_post_images' ] : false ;
   return $all_posts_option ;
 }
 

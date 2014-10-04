@@ -4,7 +4,7 @@ Donate link: http://jdrf.org/get-involved/ways-to-donate/
 Tags: Bootstrap, gallery, mobile, swipe, responsive
 Requires at least: 3.9
 Tested up to: 4.0 
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,9 @@ Create a gallery in a post or page. Click "New Post," "Add Media," and "Create G
 
 == Changelog ==
 
+= 1.0.2 =
+* Popup added for page images, if user's options allow.
+
 = 1.0.1 =
 * Fixed a bug where only one image would show.
 * Added an option to make a pop-up of all images in post, not just galleries.
@@ -55,6 +58,9 @@ Create a gallery in a post or page. Click "New Post," "Add Media," and "Create G
 * First version
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+* See a pop-up of all of your post and page images if your settings allow.
 
 = 1.0.1 =
 * Have a pop-up of all of your post images if you check the option.
