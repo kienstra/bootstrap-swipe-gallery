@@ -1,7 +1,7 @@
 ( function( $ ) {
   $( function() {
     // When a gallery image is clicked, open the modal carousel that was built by gallery-modal-setup.php
-    $( '.gallery-item' ).on('click' , function() {
+    $( '.gallery-item' ).on('click' , function( event ) {
       var $parent_gallery = $( this ).parents( '.gallery' ) ;
       var gallery_ordinal = $parent_gallery.parents( '.post' ).find( '.gallery' ).index( $parent_gallery ) ;
       var image_index = $( this ).parents( '.gallery' ).find( '.gallery-item' ).index( this ) ;
@@ -11,7 +11,7 @@
     } ) ;
 
     if ( bsg_do_allow && bsg_do_allow.post_image_carousels ) { // inserted through wp_localize_script
-      var post_selector = '.type-post' ;
+      var post_selector = '.post' ;
       var post_carousel_selector = '#non-gallery' ;
       var image_selector = 'img:not(.attachment-post-thumbnail):not(.thumbnail)' ;
       $( post_selector ).find( image_selector ).on( 'click' , function() {

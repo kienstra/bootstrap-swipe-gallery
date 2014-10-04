@@ -47,7 +47,7 @@ function bsg_get_required_files() {
 add_action( 'wp_enqueue_scripts' , 'bsg_enqueue_scripts_and_styles_if_page_has_gallery' ) ;
 function bsg_enqueue_scripts_and_styles_if_page_has_gallery() {
   global $post ;
-  if ( isset( $post ) && bsg_post_should_have_a_swipe_gallery( $post ) ) { 
+  if ( isset( $post ) && bsg_post_should_have_a_swipe_gallery( $post ) ) {
     wp_enqueue_style( BSG_PLUGIN_SLUG . '-carousel' , plugins_url( '/css/bsg-carousel.css' , __FILE__ ) , BSG_PLUGIN_VERSION );
     wp_enqueue_script( 'jquery' ) ; 
     // MIT license: https://jquery.org/license/
@@ -63,9 +63,7 @@ function bsg_localize_script() {
 }
 
 function bsg_post_should_have_a_swipe_gallery( $post ) {
-  if ( is_single( $post->ID ) ) {
-    return ( bsg_post_has_a_gallery( $post ) || bsg_do_make_carousel_of_post_images() ) ; 
-  }
+  return ( bsg_post_has_a_gallery( $post ) || bsg_do_make_carousel_of_post_images() ) ; 
 }
 
 function bsg_post_has_a_gallery( $post ) {
@@ -76,7 +74,15 @@ function bsg_post_has_a_gallery( $post ) {
 }
 
 function bsg_do_make_carousel_of_post_images() {
-  return ( bsg_options_allow_carousel_for_all_post_images() && bsg_post_has_attached_images() ) ;
+  global $post ;  
+  return ( bsg_is_single_post_or_page() && bsg_options_allow_carousel_for_all_post_images() && bsg_post_has_attached_images() ) ;
+}
+
+function bsg_is_single_post_or_page() {
+  global $post ;
+  if ( isset( $post ) ) {
+    return ( is_single( $post->ID ) || is_page( $post->ID ) ) ;
+  }
 }
 
 function bsg_options_allow_carousel_for_all_post_images() {
