@@ -16,7 +16,7 @@ Swipe through your gallery. Fast page load for mobile devices.
 * Click on a gallery image and swipe through the pop-up.
 * Demo: www.ryankienstra.com/swipe-gallery
 * Images re-size for mobile devices.
-* Option to create pop-ups of all post images.
+* Option to create pop-ups of all post and page images.
 * Light: Only sends 3 small files to the browser. Does nothing if there's no gallery.
 * Works with themes "Bootstrap Ultimate," "DevDmBootstrap3," "evolve," "Unite." 
 * Doesn't work with "Customizr," "Inkzine," and "Radiant."
@@ -64,6 +64,3 @@ Create a gallery in a post or page. Click "New Post," "Add Media," and "Create G
 
 = 1.0.1 =
 * Have a pop-up of all of your post images if you check the option.
-
-
-

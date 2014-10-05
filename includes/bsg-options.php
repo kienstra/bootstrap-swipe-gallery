@@ -3,8 +3,8 @@
 add_action( 'admin_menu' , 'bsg_plugin_page' ) ;
 function bsg_plugin_page() {
   add_options_page(
-    __( 'Bootstrap Swipe Gallery Settings' , BSG_PLUGIN_SLUG ) ,
-    __( 'Swipe Gallery' , BSG_PLUGIN_SLUG ) ,
+    __( 'Bootstrap Swipe Gallery Settings' , 'bootstrap-swipe-gallery' ) ,
+    __( 'Swipe Gallery' , 'bootstrap-swipe-gallery' ) ,
     'manage_options' ,
     'bsg_options_page' ,
     'bsg_plugin_options_page_text' ) ;
@@ -40,16 +40,15 @@ function bsg_settings_setup() {
     return $validated ;
   }
 
-  add_settings_section( 'bsg_plugin_primary' , __( 'Settings' , BSG_PLUGIN_SLUG ) ,
+  add_settings_section( 'bsg_plugin_primary' , __( 'Settings' , 'bootstrap-swipe-gallery' ) ,
 			    'bsg_plugin_section_text', 'bsg_options_page'  ) ;
 
   function bsg_plugin_section_text() {
     return ;
   }
 
-  add_settings_field( 'bsg_allow_carousel_for_all_post_images' , __( 'Create pop-up for all post images, not just galleries' , BSG_PLUGIN_SLUG ) , 'bsg_output_callback' , 'bsg_options_page' , 'bsg_plugin_primary' ) ;
+  add_settings_field( 'bsg_allow_carousel_for_all_post_images' , __( 'Create pop-up for all post and page images, not just galleries' , 'bootstrap-swipe-gallery' ) , 'bsg_output_callback' , 'bsg_options_page' , 'bsg_plugin_primary' ) ;
     
-
   function bsg_output_callback() {
     $name = 'bsg_plugin_options[bsg_allow_carousel_for_all_post_images]' ;
     $options = get_option( 'bsg_plugin_options' ) ;
