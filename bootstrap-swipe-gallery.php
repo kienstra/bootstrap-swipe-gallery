@@ -32,7 +32,7 @@ function bsg_activate_with_default_options() {
 
 add_action( 'plugins_loaded' , 'bsg_text_domain' ) ;
 function bsg_text_domain() {
-  load_plugin_textdomain( 'bootstrap-swipe-gallery' ) ; 
+  load_plugin_textdomain( 'bootstrap-swipe-gallery' , false , basename( dirname( __FILE__ ) ) . '/languages' ) ;  
 }
 
 add_action( 'plugins_loaded' , 'bsg_get_required_files' ) ;
