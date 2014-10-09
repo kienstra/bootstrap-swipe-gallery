@@ -55,8 +55,24 @@ function bsg_echo_carousel_of_all_post_images() {
 }
 
 function bsg_get_image_ids() { 
-  global $post ;
-  $post_id = $post->ID ;  
+  $content = ac_get_post_content() ;
+  $regex = "/wp-image-([\d]{1,4})/" ;
+  preg_match_all( $regex , $content , $matches ) ;
+  $ids = isset( $matches[ 1 ] ) ? $matches[ 1 ] : "" ;
+  return $ids ;
+}
+
+function ac_get_post_content() {
+  global $post ; 
+  $post = get_post( $post->ID ) ; 
+  return $post->post_content ;
+}
+
+
+/*
+
+  // fallthrough if there aren't any wp-image-[\d] images ?
+  // if ( "" == $ids  ) 
   $image_ids = array() ;
   
   $args = array( 'post_type' => 'attachment' ,
@@ -73,5 +89,7 @@ function bsg_get_image_ids() {
       array_push( $image_ids , $attachment->ID ) ;
     }
   }
-  return $image_ids ; 
-}
+
+*/
+
+
