@@ -64,7 +64,7 @@ function bsg_post_should_have_a_swipe_gallery( $post ) {
   return ( bsg_post_has_a_gallery( $post ) || bsg_do_make_carousel_of_post_images() ) ; 
 }
 
-function bsg_post_has_a_gallery( $post ) {
+function bsg_post_has_a_gallery( $post ) {  
   $galleries = get_post_galleries( $post->id , false ) ;
   if ( $galleries ) {
     return true ;

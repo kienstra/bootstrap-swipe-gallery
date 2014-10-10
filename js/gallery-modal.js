@@ -14,7 +14,7 @@
     if ( bsg_do_allow && bsg_do_allow.post_image_carousels ) { // inserted through wp_localize_script
       var post_selector = '.post' ;
       var post_carousel_selector = '#non-gallery' ;
-      var image_selector = 'img:not(.attachment-post-thumbnail):not(.thumbnail)' ;
+      var image_selector = 'img:not(.thumbnail):not(.attachment-thumbnail):not(.attachment-post-thumbnail)' ;
 
       var post_image_regex = /wp-image-[\d]{1,4}/ ; // should insert with wp_localize_script ?
       var $old_non_gallery_images_in_post = $( post_selector ).filter( function() {
@@ -22,6 +22,7 @@
       } ) ;
 
       $( post_selector ).find( image_selector ).on( 'click' , function() {
+	console.log( 'clicked' ) ;
 	if ( $( this ).parents( '.gallery-item' ).length > 0 ) {
 	  return $( this ) ; // this is actually a gallery item , so return
 	}
