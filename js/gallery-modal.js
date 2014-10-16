@@ -22,7 +22,6 @@
       } ) ;
 
       $( post_selector ).find( image_selector ).on( 'click' , function() {
-	console.log( 'clicked' ) ;
 	if ( $( this ).parents( '.gallery-item' ).length > 0 ) {
 	  return $( this ) ; // this is actually a gallery item , so return
 	}
