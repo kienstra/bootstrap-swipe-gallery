@@ -10,7 +10,7 @@
 			return false;
 		} );
 
-		// shortcut the galllery entirely 
+		// shortcut the galllery entirely
 		if ( bsg_do_allow && bsg_do_allow.post_image_carousels ) { // inserted through wp_localize_script
 			var post_selector = '.post';
 			var post_carousel_selector = '#non-gallery';
@@ -18,17 +18,17 @@
 
 			var post_image_regex = /wp-image-[\d]{1,4}/; // should insert with wp_localize_script ?
 			var $old_non_gallery_images_in_post = $( post_selector ).filter( function() {
-	return this.className.match( post_image_regex );
+				return this.className.match( post_image_regex );
 			} );
 
 			$( post_selector ).find( image_selector ).on( 'click' , function() {
-	if ( $( this ).parents( '.gallery-item' ).length > 0 ) {
-	 return $( this ); // this is actually a gallery item , so return
-	}
-	var $modal_carousel = $( post_carousel_selector );
-	var post_image_index = $( this ).parents( post_selector ).find( image_selector ).index( this );
-	open_modal_carousel_with_image( $modal_carousel , post_image_index );
-	return false;
+				if ( $( this ).parents( '.gallery-item' ).length > 0 ) {
+					return $( this ); // this is actually a gallery item , so return
+				}
+				var $modal_carousel = $( post_carousel_selector );
+				var post_image_index = $( this ).parents( post_selector ).find( image_selector ).index( this );
+				open_modal_carousel_with_image( $modal_carousel , post_image_index );
+				return false;
 			} );
 		}
 
@@ -72,8 +72,9 @@
 		$( '.gallery-modal' ).swiperight( function() {
 			$( this ).carousel( 'prev' );
 		} );
+
 		$( '.gallery-modal' ).swipeleft(function() {
-	$( this ).carousel( 'next' );
+			$( this ).carousel( 'next' );
 		} );
 
 		size_containing_div_of_image();
@@ -81,7 +82,7 @@
 
 		function size_containing_div_of_image() {
 			$( '.gallery-modal .carousel.carousel-gallery .carousel-inner .item' ).css( 'height' , function() {
-	return ( 0.8 * $( window ).height() );
+				return ( 0.8 * $( window ).height() );
 			} );
 		}
 
