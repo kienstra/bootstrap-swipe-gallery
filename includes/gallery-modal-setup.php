@@ -93,7 +93,7 @@ function bsg_query_for_images_in_post() {
 	global $post;
 	$post_id = isset( $post->ID ) ? $post->ID : "";
 	$args = array( 'post_type' => 'attachment' ,
-			'posts_per_page' => 100 ,
+			'posts_per_page' => 20 ,
 			'order'	 => 'ASC' ,
 			'orderby'	 => 'menu_order' ,
 			'post_parent' => $post_id ,

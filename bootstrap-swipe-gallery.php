@@ -5,7 +5,7 @@ Plugin Name: Bootstrap Swipe Gallery
 Plugin URI: www.ryankienstra.com/bootstrap-swipe-gallery
 Description: Swipe through gallery images on touch devices. Image sizes adjust to screen size. Must have Twitter Bootstrap 3. 
 
-Version: 1.0.3
+Version: 1.0.4
 Author: Ryan Kienstra
 Author URI: www.ryankienstra.com
 License: GPL2
@@ -16,7 +16,7 @@ if ( ! defined( 'WPINC' )	) {
 }
 
 define( 'BSG_PLUGIN_SLUG' , 'bootstrap-swipe-gallery' );
-define( 'BSG_PLUGIN_VERSION' , '1.0.2' ); 
+define( 'BSG_PLUGIN_VERSION' , '1.0.4' ); 
 
 register_activation_hook( __FILE__ , 'bsg_deactivate_if_early_wordpress_version' );
 function bsg_deactivate_if_early_wordpress_version() {
