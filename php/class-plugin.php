@@ -1,100 +1,135 @@
 <?php
 /**
- * Instantiates the Bootstrap Swipe Gallery plugin
+ * Main class for the Bootstrap Swipe Gallery plugin
  *
  * @package BootstrapSwipeGallery
  */
 
 namespace BootstrapSwipeGallery;
 
-/*
-Plugin Name: Bootstrap Swipe Gallery
-Plugin URI: www.ryankienstra.com/bootstrap-swipe-gallery
-Description: Swipe through gallery images on touch devices. Image sizes adjust to screen size. Must have Twitter Bootstrap 3.
+/**
+ * Main plugin class
+ */
+class Plugin {
 
-Version: 1.0.4
-Author: Ryan Kienstra
-Author URI: www.ryankienstra.com
-License: GPL2
-*/
+	/**
+	 * Plugin version.
+	 *
+	 * @var string
+	 */
+	public $version = '1.0.4';
 
-define( 'BSG_PLUGIN_SLUG' , 'bootstrap-swipe-gallery' );
-define( 'BSG_PLUGIN_VERSION' , '1.0.4' ); 
+	/**
+	 * Plugin slug.
+	 *
+	 * @var string
+	 */
+	public $slug = 'bootstrap-swipe-gallery';
 
-register_activation_hook( __FILE__ , 'bsg_deactivate_if_early_wordpress_version' );
-function bsg_deactivate_if_early_wordpress_version() {
-	if ( version_compare( get_bloginfo( 'version' ) , '3.8' , '<' ) ) {
-		deactivate_plugins( basename( __FILE__ ) );
+	/**
+	 * Get the instance of this plugin
+	 *
+	 * @return object $instance Plugin instance.
+	 */
+	public static function get_instance() {
+		static $instance;
+
+		if ( ! $instance instanceof Plugin ) {
+			$instance = new Plugin();
+		}
+
+		return $instance;
 	}
-}
 
-register_activation_hook( __FILE__ , 'bsg_activate_with_default_options' );
-function bsg_activate_with_default_options() {
-	add_option( 'bsg_plugin_options' , array( 'bsg_allow_carousel_for_all_post_images' , '0' ) );
-}
-
-add_action( 'plugins_loaded' , 'bsg_text_domain' );
-function bsg_text_domain() {
-	load_plugin_textdomain( 'bootstrap-swipe-gallery' , false , basename( dirname( __FILE__ ) ) . '/languages' );	
-}
-
-add_action( 'plugins_loaded' , 'bsg_get_required_files' );
-function bsg_get_required_files() {
-	require_once( plugin_dir_path( __FILE__ ) . 'includes/class-bsg-modal-carousel.php' );
-	require_once( plugin_dir_path( __FILE__ ) . 'includes/gallery-modal-setup.php' );
-	require_once( plugin_dir_path( __FILE__ ) . 'includes/bsg-options.php' );
-}
-
-add_action( 'wp_enqueue_scripts' , 'bsg_enqueue_scripts_and_styles_if_page_has_gallery' );
-function bsg_enqueue_scripts_and_styles_if_page_has_gallery() {
-	global $post;
-	if ( isset( $post ) && bsg_post_should_have_a_swipe_gallery( $post ) ) {
-		wp_enqueue_style( BSG_PLUGIN_SLUG . '-carousel' , plugins_url( '/css/bsg-carousel.css' , __FILE__ ) , BSG_PLUGIN_VERSION );
-		wp_enqueue_script( 'jquery' ); 
-		// MIT license: https://jquery.org/license/
-		wp_enqueue_script( BSG_PLUGIN_SLUG . '-jquery-mobile-swipe', plugins_url( '/js/jquery.mobile.custom.min.js' , __FILE__ ) , array( 'jquery' ) , BSG_PLUGIN_VERSION , true );
-		wp_enqueue_script( BSG_PLUGIN_SLUG . '-modal-setup', plugins_url( '/js/gallery-modal.js' , __FILE__ ) , array( 'jquery' , BSG_PLUGIN_SLUG . '-jquery-mobile-swipe' ) , BSG_PLUGIN_VERSION , true );
-		bsg_localize_script(); 
+	/**
+	 * Instantiate the class.
+	 */
+	private function __construct() {
+		register_activation_hook( __FILE__ , array( $this, 'deactivate_if_early_wordpress_version' ) );
+		register_activation_hook( __FILE__ , array( $this, 'activate_with_default_options' ) );
+		add_action( 'plugins_loaded', array( $this, 'text_domain' ) );
+		add_action( 'plugins_loaded', array( $this, 'get_required_files' ) );
+		add_action( 'wp_enqueue_scripts' , array( $this, 'enqueue_scripts_and_styles_if_page_has_gallery' ) );
 	}
-}
 
-function bsg_localize_script() {
-	$do_allow = ( bsg_do_make_carousel_of_post_images() ) ? true : false; 
-	wp_localize_script( BSG_PLUGIN_SLUG . '-modal-setup' , 'bsg_do_allow' , array( 'post_image_carousels' => $do_allow ) );
-}
-
-function bsg_post_should_have_a_swipe_gallery( $post ) {
-	return ( bsg_post_has_a_gallery( $post ) || bsg_do_make_carousel_of_post_images() );
-}
-
-function bsg_post_has_a_gallery( $post ) {	
-	$galleries = get_post_galleries( $post->ID , false );
-	if ( $galleries ) {
-		return true;
+	public function deactivate_if_early_wordpress_version() {
+		if ( version_compare( get_bloginfo( 'version' ) , '3.8' , '<' ) ) {
+			deactivate_plugins( basename( __FILE__ ) );
+		}
 	}
-}
 
-function bsg_do_make_carousel_of_post_images() {
-	return ( bsg_is_single_post_or_page() && bsg_options_allow_carousel_for_all_post_images() && bsg_post_has_attached_images() );
-}
 
-function bsg_is_single_post_or_page() {
-	global $post;
-	if ( isset( $post ) ) {
-		return ( is_single( $post->ID ) || is_page( $post->ID ) );
+	public function activate_with_default_options() {
+		add_option( 'bsg_plugin_options' , array( 'allow_carousel_for_all_post_images', '0' ) );
 	}
-}
 
-function bsg_options_allow_carousel_for_all_post_images() {
-	$plugin_options = get_option( 'bsg_plugin_options' );
-	$all_posts_option = ( isset( $plugin_options[ 'bsg_allow_carousel_for_all_post_images' ] ) ) ?
-		$plugin_options[ 'bsg_allow_carousel_for_all_post_images' ] : false;
-	return $all_posts_option;
-}
-
-function bsg_post_has_attached_images() {
-	$images = bsg_get_image_ids();
-	if ( $images ) {
-		return true;
+	public function text_domain() {
+		load_plugin_textdomain( 'bootstrap-swipe-gallery' , false , basename( dirname( __FILE__ ) ) . '/languages' );
 	}
+
+	public function get_required_files() {
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-bsg-modal-carousel.php' );
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/gallery-modal-setup.php' );
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/bsg-options.php' );
+	}
+
+	public function enqueue_scripts_and_styles_if_page_has_gallery() {
+		global $post;
+		if ( isset( $post ) && $this->post_should_have_a_swipe_gallery( $post ) ) {
+			wp_enqueue_style( $this->slug . '-carousel', plugins_url( '/css/bsg-carousel.css' , __FILE__ ) , $this->version );
+			wp_enqueue_script( 'jquery' );
+			// MIT license: https://jquery.org/license/
+			wp_enqueue_script( $this->slug . '-jquery-mobile-swipe', plugins_url( '/js/jquery.mobile.custom.min.js' , __FILE__ ) , array( 'jquery' ) , $this->version , true );
+			wp_enqueue_script( $this->slug . '-modal-setup', plugins_url( '/js/gallery-modal.js' , __FILE__ ) , array( 'jquery', $this->slug . '-jquery-mobile-swipe' ) , $this->version , true );
+			$this->localize_script();
+		}
+	}
+
+	public function localize_script() {
+		$do_allow = ( $this->do_make_carousel_of_post_images() ) ? true : false;
+		wp_localize_script(
+			$this->slug . '-modal-setup',
+			'bsg_do_allow',
+			array(
+				'post_image_carousels' => $do_allow,
+			)
+		);
+	}
+
+	public function post_should_have_a_swipe_gallery( $post ) {
+		return ( $this->post_has_a_gallery( $post ) || $this->do_make_carousel_of_post_images() );
+	}
+
+	public function post_has_a_gallery( $post ) {
+		$galleries = get_post_galleries( $post->ID , false );
+		if ( $galleries ) {
+			return true;
+		}
+	}
+
+	public function do_make_carousel_of_post_images() {
+		return ( $this->is_single_post_or_page() && $this->options_allow_carousel_for_all_post_images() && $this->post_has_attached_images() );
+	}
+
+	public function is_single_post_or_page() {
+		global $post;
+		if ( isset( $post ) ) {
+			return ( is_single( $post->ID ) || is_page( $post->ID ) );
+		}
+	}
+
+	public function options_allow_carousel_for_all_post_images() {
+		$plugin_options = get_option( 'bsg_plugin_options' );
+		$all_posts_option = ( isset( $plugin_options['bsg_allow_carousel_for_all_post_images'] ) ) ?
+			$plugin_options['bsg_allow_carousel_for_all_post_images'] : false;
+		return $all_posts_option;
+	}
+
+	public function post_has_attached_images() {
+		$images = bsg_get_image_ids();
+		if ( $images ) {
+			return true;
+		}
+	}
+
 }
