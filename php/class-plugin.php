@@ -107,21 +107,18 @@ class Plugin {
 	}
 
 	public function do_make_carousel_of_post_images() {
-		return ( $this->is_single_post_or_page() && $this->options_allow_carousel_for_all_post_images() && $this->post_has_attached_images() );
-	}
-
-	public function is_single_post_or_page() {
-		global $post;
-		if ( isset( $post ) ) {
-			return ( is_single( $post->ID ) || is_page( $post->ID ) );
-		}
+		return (
+			( is_single() || is_page() )
+			&&
+			$this->options_allow_carousel_for_all_post_images()
+			&&
+			$this->post_has_attached_images()
+		);
 	}
 
 	public function options_allow_carousel_for_all_post_images() {
 		$plugin_options = get_option( 'bsg_plugin_options' );
-		$all_posts_option = ( isset( $plugin_options['bsg_allow_carousel_for_all_post_images'] ) ) ?
-			$plugin_options['bsg_allow_carousel_for_all_post_images'] : false;
-		return $all_posts_option;
+		return ( isset( $plugin_options['bsg_allow_carousel_for_all_post_images'] ) ) ? $plugin_options['bsg_allow_carousel_for_all_post_images'] : false;
 	}
 
 	public function post_has_attached_images() {
