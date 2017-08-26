@@ -47,8 +47,8 @@ class Plugin {
 	private function __construct() {
 		register_activation_hook( __FILE__ , array( $this, 'deactivate_if_early_wordpress_version' ) );
 		register_activation_hook( __FILE__ , array( $this, 'activate_with_default_options' ) );
-		add_action( 'plugins_loaded', array( $this, 'text_domain' ) );
-		add_action( 'plugins_loaded', array( $this, 'get_required_files' ) );
+		add_action( 'plugins_loaded', array( $this, 'textdomain' ) );
+		add_action( 'plugins_loaded', array( $this, 'load_files' ) );
 		add_action( 'wp_enqueue_scripts' , array( $this, 'enqueue_scripts_and_styles_if_page_has_gallery' ) );
 	}
 
@@ -58,19 +58,18 @@ class Plugin {
 		}
 	}
 
-
 	public function activate_with_default_options() {
 		add_option( 'bsg_plugin_options' , array( 'allow_carousel_for_all_post_images', '0' ) );
 	}
 
-	public function text_domain() {
+	public function textdomain() {
 		load_plugin_textdomain( 'bootstrap-swipe-gallery' , false , basename( dirname( __FILE__ ) ) . '/languages' );
 	}
 
-	public function get_required_files() {
-		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-bsg-modal-carousel.php' );
-		require_once( plugin_dir_path( __FILE__ ) . 'includes/gallery-modal-setup.php' );
-		require_once( plugin_dir_path( __FILE__ ) . 'includes/bsg-options.php' );
+	public function load_files() {
+		require_once __DIR__ . '/class-bsg-modal-carousel.php';
+		require_once __DIR__ . '/gallery-modal-setup.php';
+		require_once __DIR__ . '/bsg-options.php';
 	}
 
 	public function enqueue_scripts_and_styles_if_page_has_gallery() {
