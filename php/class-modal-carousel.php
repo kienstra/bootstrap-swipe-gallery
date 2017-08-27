@@ -43,7 +43,7 @@ class Modal_Carousel {
 	}
 
 	private function append_to_carousel_indicators( $image_src_full_size ) {
-		$is_active = (0 === $this->slide_to_index ) ? 'active' : '';
+		$is_active = ( 0 === $this->slide_to_index ) ? 'active' : '';
 
 		$this->image_indicators .=
 		'<li class="' . esc_attr( $is_active ) . '" data-target="#' . esc_attr( $this->gallery_id ) . '" data-slide-to="' . $this->slide_to_index . '" data-src="' . esc_url( $image_src_full_size ) . '"></li>';

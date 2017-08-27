@@ -7,7 +7,7 @@ function bsg_plugin_page() {
 		__( 'Swipe Gallery' , 'bootstrap-swipe-gallery' ) ,
 		'manage_options' ,
 		'bsg_options_page' ,
-		'bsg_plugin_options_page_text' );
+	'bsg_plugin_options_page_text' );
 }
 
 function bsg_plugin_options_page_text() {
@@ -33,7 +33,7 @@ function bsg_settings_setup() {
 	register_setting( 'bsg_plugin_options' , 'bsg_plugin_options' , 'bsg_plugin_validate_options' );
 
 	function bsg_plugin_validate_options( $input ) {
-		$setting_key =	'bsg_allow_carousel_for_all_post_images';
+		$setting_key = 'bsg_allow_carousel_for_all_post_images';
 		if ( bsg_is_one_or_zero( $input[ $setting_key ] ) ) {
 			$validated[ $setting_key ] = $input[ $setting_key ];
 		}
@@ -41,7 +41,7 @@ function bsg_settings_setup() {
 	}
 
 	add_settings_section( 'bsg_plugin_primary' , __( 'Settings' , 'bootstrap-swipe-gallery' ) ,
-			 'bsg_plugin_section_text', 'bsg_options_page'	);
+	'bsg_plugin_section_text', 'bsg_options_page'	);
 
 	function bsg_plugin_section_text() {
 		return;
@@ -52,7 +52,7 @@ function bsg_settings_setup() {
 	function bsg_output_callback() {
 		$name = 'bsg_plugin_options[bsg_allow_carousel_for_all_post_images]';
 		$options = get_option( 'bsg_plugin_options' );
-		$allow_carousel_all_posts = isset( $options[ 'bsg_allow_carousel_for_all_post_images' ] ) ? $options[ 'bsg_allow_carousel_for_all_post_images' ] : '0';
+		$allow_carousel_all_posts = isset( $options['bsg_allow_carousel_for_all_post_images'] ) ? $options['bsg_allow_carousel_for_all_post_images'] : '0';
 
 		?>
 			<input type="checkbox" name="<?php echo $name; ?>" <?php checked( $allow_carousel_all_posts , '1' , true ); ?> value="1"/>
@@ -63,8 +63,8 @@ function bsg_settings_setup() {
 // Add settings link on the main plugin page
 add_filter( 'plugin_action_links' , 'bsg_add_settings_link' , 2 , 2 );
 function bsg_add_settings_link( $actions, $file ) {
-if ( false !== strpos( $file, BSG_PLUGIN_SLUG ) ) {
-		$actions[ 'settings' ] = '<a href="options-general.php?page=bsg_options_page">Settings</a>';
+	if ( false !== strpos( $file, BSG_PLUGIN_SLUG ) ) {
+		$actions['settings'] = '<a href="options-general.php?page=bsg_options_page">Settings</a>';
 	}
 	return $actions;
 }
