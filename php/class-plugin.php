@@ -83,9 +83,9 @@ class Plugin {
 	}
 
 	public function load_files() {
-		require_once __DIR__ . '/class-bsg-modal-carousel.php';
+		require_once __DIR__ . '/class-modal-carousel.php';
 		require_once __DIR__ . '/gallery-modal-setup.php';
-		require_once __DIR__ . '/bsg-options.php';
+		require_once __DIR__ . '/class-options.php';
 	}
 
 	public function enqueue_assets() {
