@@ -35,7 +35,7 @@ function bsg_create_and_echo_modal_carousel( $image_ids , $carousel_id = '' ) {
 	if ( empty( $image_ids ) ) {
 		return;
 	}
-	$modal_for_gallery = new BSG_Modal_Carousel( $carousel_id );
+	$modal_for_gallery = new Modal_Carousel( $carousel_id );
 	foreach( $image_ids as $image_id ) {
 		$src_full_size = bsg_get_full_size_image( $image_id );
 		$modal_for_gallery->add_image( $src_full_size , '' );

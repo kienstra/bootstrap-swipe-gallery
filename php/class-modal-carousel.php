@@ -1,7 +1,7 @@
 <?php
 
 // Builds and echoes a modal carousel for each gallery
-class BSG_Modal_Carousel {
+class Modal_Carousel {
 
 	private $gallery_id;
 	private $carousel_inner_items;
@@ -22,7 +22,7 @@ class BSG_Modal_Carousel {
 	public function add_image( $image_src_full_size ) {
 		$this->append_image_to_inner_items( $image_src_full_size );
 		$this->append_to_carousel_indicators( $image_src_full_size );
-		$this->number_of_images++; // $this->number_of_images;
+		$this->number_of_images++;
 	}
 
 	private function append_image_to_inner_items( $image_src_full_size ) {
