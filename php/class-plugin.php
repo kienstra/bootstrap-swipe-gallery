@@ -27,19 +27,11 @@ class Plugin {
 	public $slug = 'bootstrap-swipe-gallery';
 
 	/**
-	 * Key for the carousel options.
+	 * Instantiated plugin classes.
 	 *
-	 * @var string
+	 * @var array
 	 */
-	public $carousel_option = 'bsg_allow_carousel_for_all_post_images';
-
-	/**
-	 * Default value for the carousel option.
-	 *
-	 * @see $carousel_option
-	 * @var string
-	 */
-	public $default_option = '0';
+	public $components;
 
 	/**
 	 * Get the instance of this plugin
@@ -60,10 +52,11 @@ class Plugin {
 	 * Instantiate the class.
 	 */
 	private function __construct() {
+		$this->load_files();
+		$this->instantiate_classes();
 		register_activation_hook( __FILE__, array( $this, 'deactivate_if_early_wordpress_version' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate_with_default_options' ) );
 		add_action( 'init', array( $this, 'textdomain' ) );
-		add_action( 'plugins_loaded', array( $this, 'load_files' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'localize_asset' ) );
 	}
@@ -75,7 +68,7 @@ class Plugin {
 	}
 
 	public function activate_with_default_options() {
-		add_option( 'bsg_plugin_options', array( $this->carousel_option, $this->default_option ) );
+		add_option( 'bsg_plugin_options', array( $this->components['options']->carousel_option, $this->components['options']->default_option ) );
 	}
 
 	public function textdomain() {
@@ -86,6 +79,16 @@ class Plugin {
 		require_once __DIR__ . '/class-modal-carousel.php';
 		require_once __DIR__ . '/gallery-modal-setup.php';
 		require_once __DIR__ . '/class-options.php';
+	}
+
+	/**
+	 * Instantiate the plugin classes, and call their init() methods.
+	 *
+	 * @return void
+	 */
+	public function init_classes() {
+		$this->components['options'] = new Option( $this );
+		$this->components['options']->init();
 	}
 
 	public function enqueue_assets() {
@@ -132,8 +135,8 @@ class Plugin {
 
 	public function options_allow_carousel_for_all_post_images() {
 		$plugin_options = get_option( 'bsg_plugin_options' );
-		if ( isset( $plugin_options[ $this->carousel_option ] ) ) {
-			return ( '1' === $plugin_options[ $this->carousel_option ] );
+		if ( isset( $plugin_options[ $this->components['options']->carousel_option ] ) ) {
+			return ( '1' === $plugin_options[ $this->components['options']->carousel_option ] );
 		} else {
 			return false;
 		}

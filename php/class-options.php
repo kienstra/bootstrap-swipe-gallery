@@ -1,70 +1,186 @@
 <?php
+/**
+ * Options class
+ *
+ * @package BootstrapSwipeGallery
+ */
 
-add_action( 'admin_menu' , 'bsg_plugin_page' );
-function bsg_plugin_page() {
-	add_options_page(
-		__( 'Bootstrap Swipe Gallery Settings' , 'bootstrap-swipe-gallery' ) ,
-		__( 'Swipe Gallery' , 'bootstrap-swipe-gallery' ) ,
-		'manage_options' ,
-		'bsg_options_page' ,
-	'bsg_plugin_options_page_text' );
-}
+namespace BootstrapSwipeGallery;
 
-function bsg_plugin_options_page_text() {
-	?>
-	<div class="wrap">
-		<?php screen_icon(); ?>
-		<h2>Bootstrap Swipe Gallery</h2>
-		<form action="options.php" method="post">
-			<?php settings_fields( 'bsg_plugin_options' ); ?>
-			<?php do_settings_sections( 'bsg_options_page' ); ?>
-			<input name="Submit" type="submit" value="Save Changes" class="button-primary" />
-		</form>
-	</div>
-<?php
-}
+/**
+ * Adds an options page.
+ */
+class Options {
 
-function bsg_is_one_or_zero( $value ) {
-	return ( '1' == $value ) || ( '0' == $value );
-}
+	/**
+	 * Instance of the plugin.
+	 *
+	 * @var object
+	 */
+	public $plugin;
 
-add_action( 'admin_init' , 'bsg_settings_setup' );
-function bsg_settings_setup() {
-	register_setting( 'bsg_plugin_options' , 'bsg_plugin_options' , 'bsg_plugin_validate_options' );
+	/**
+	 * Key for the plugin options.
+	 *
+	 * @var string
+	 */
+	public $plugin_options = 'bsg_plugin_options';
 
-	function bsg_plugin_validate_options( $input ) {
-		$setting_key = 'bsg_allow_carousel_for_all_post_images';
-		if ( bsg_is_one_or_zero( $input[ $setting_key ] ) ) {
-			$validated[ $setting_key ] = $input[ $setting_key ];
+	/**
+	 * Key for the plugin options.
+	 *
+	 * @var string
+	 */
+	public $options_page = 'bsg_options_page';
+
+	/**
+	 * Key for the carousel options.
+	 *
+	 * @var string
+	 */
+	public $carousel_option = 'bsg_allow_carousel_for_all_post_images';
+
+	/**
+	 * Default value for the carousel option.
+	 *
+	 * @see $carousel_option
+	 * @var string
+	 */
+	public $default_option = '0';
+
+	/**
+	 * Options constructor.
+	 *
+	 * @param object $plugin Instance of the plugin.
+	 */
+	function __construct( $plugin ) {
+		$this->plugin = $plugin;
+	}
+
+	/**
+	 * Add action and filter hooks.
+	 *
+	 * @return void
+	 */
+	function init() {
+		add_action( 'admin_menu', array( $this, 'plugin_page' ) );
+		add_action( 'admin_init', array( $this, 'settings_setup' ) );
+		add_filter( 'plugin_action_links', array( $this, 'add_settings_link' ), 2, 2 );
+	}
+
+	/**
+	 * Add the plugin options page.
+	 *
+	 * @return void
+	 */
+	public function plugin_page() {
+		add_options_page(
+			__( 'Bootstrap Swipe Gallery Settings', 'bootstrap-swipe-gallery' ),
+			__( 'Swipe Gallery', 'bootstrap-swipe-gallery' ),
+			'manage_options',
+			$this->plugin_options,
+			array( $this, 'plugin_options_page_text' )
+		);
+	}
+
+	/**
+	 * Echo the markup for the plugin options page.
+	 *
+	 * @return void
+	 */
+	public function plugin_options_page_text() {
+		?>
+		<div class="wrap">
+			<h2><?php esc_html_e( 'Bootstrap Swipe Gallery', 'bootstrap-swipe-gallery' ); ?></h2>
+			<form action="options.php" method="post">
+				<?php settings_fields( $this->plugin_options ); ?>
+				<?php do_settings_sections( $this->plugin_options ); ?>
+				<input name="Submit" type="submit" value="Save Changes" class="button-primary" />
+			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Validate whether the plugin option entry is '1' or '0.'
+	 *
+	 * @param string $value Settings input, to be evaluated.
+	 * @return boolean $is_one_or_zero Whether the $value is '1' or '0.'
+	 */
+	public function is_one_or_zero( $value ) {
+		return ( '1' === $value ) || ( '0' === $value );
+	}
+
+	/**
+	 * Register plugin options setting, and add the settings section and fields.
+	 *
+	 * @return void
+	 */
+	public function settings_setup() {
+		register_setting( $this->plugin_options, $this->plugin_options, array( $this, 'plugin_validate_options' ) );
+		add_settings_section(
+			'bsg_plugin_primary',
+			__( 'Settings', 'bootstrap-swipe-gallery' ),
+			'__return_false',
+			$this->plugin_options
+		);
+		add_settings_field(
+			$this->carousel_option,
+			__( 'Create pop-up for all post and page images, not just galleries', 'bootstrap-swipe-gallery' ),
+			array( $this, 'settings_display' ),
+			$this->plugin_options,
+			'bsg_plugin_primary'
+		);
+	}
+
+	/**
+	 * Output the markup for the carousel option.
+	 *
+	 * @return void
+	 */
+	public function settings_display() {
+		$name = $this->plugin_options . '[' . $this->carousel_option . ']';
+		$options = get_option( $this->plugin_options );
+		$allow_carousel_all_posts = isset( $options[ $this->carousel_option ] ) ? $options[ $this->carousel_option ] : $this->default_option;
+		echo '<input type="checkbox" name="' . esc_attr( $name ) . '"' . checked( $allow_carousel_all_posts, '1', false ) . ' value="1"/>';
+	}
+
+	/**
+	 * Validate the user input in the plugin option.
+	 *
+	 * @param string $input Option values, as input by user.
+	 * @return array $validated Populated with the value from $input, if it's valid.
+	 */
+	public function plugin_validate_options( $input ) {
+		$validated = array();
+		$is_valid = (
+			isset( $input[ $this->carousel_option ] )
+			&&
+			(
+				( '1' === $input[ $this->carousel_option ] )
+				||
+				( '0' === $input[ $this->carousel_option ] )
+			)
+		);
+
+		if ( $is_valid ) {
+			$validated[ $this->carousel_option ] = $input[ $this->carousel_option ];
 		}
 		return $validated;
 	}
 
-	add_settings_section( 'bsg_plugin_primary' , __( 'Settings' , 'bootstrap-swipe-gallery' ) ,
-	'bsg_plugin_section_text', 'bsg_options_page'	);
-
-	function bsg_plugin_section_text() {
-		return;
+	/**
+	 * Add a 'Settings' link on the main plugin page
+	 *
+	 * @param array  $actions Links to plugin actions.
+	 * @param string $plugin_file The plugin file's path.
+	 * @return array $actions This plugin's actions, possibly including the new 'Settings' link.
+	 */
+	public function add_settings_link( $actions, $plugin_file ) {
+		if ( false !== strpos( $plugin_file, $this->plugin->slug ) ) {
+			$actions['settings'] = '<a href="options-general.php?page=bsg_options_page">' . esc_html__( 'Settings', 'bootstrap-swipe-gallery' ) . '</a>';
+		}
+		return $actions;
 	}
 
-	add_settings_field( 'bsg_allow_carousel_for_all_post_images' , __( 'Create pop-up for all post and page images, not just galleries' , 'bootstrap-swipe-gallery' ) , 'bsg_output_callback' , 'bsg_options_page' , 'bsg_plugin_primary' );
-
-	function bsg_output_callback() {
-		$name = 'bsg_plugin_options[bsg_allow_carousel_for_all_post_images]';
-		$options = get_option( 'bsg_plugin_options' );
-		$allow_carousel_all_posts = isset( $options['bsg_allow_carousel_for_all_post_images'] ) ? $options['bsg_allow_carousel_for_all_post_images'] : '0';
-
-		?>
-			<input type="checkbox" name="<?php echo $name; ?>" <?php checked( $allow_carousel_all_posts , '1' , true ); ?> value="1"/>
-	<?php
-	}
-}
-
-// Add settings link on the main plugin page
-add_filter( 'plugin_action_links' , 'bsg_add_settings_link' , 2 , 2 );
-function bsg_add_settings_link( $actions, $file ) {
-	if ( false !== strpos( $file, BSG_PLUGIN_SLUG ) ) {
-		$actions['settings'] = '<a href="options-general.php?page=bsg_options_page">Settings</a>';
-	}
-	return $actions;
 }
