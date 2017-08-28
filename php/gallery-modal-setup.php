@@ -69,17 +69,11 @@ function bsg_get_image_ids() {
 }
 
 function bsg_traverse_post_content_for_image_ids() {
-	$content = bsg_get_post_content();
+	$content = get_the_content();
 	$regex = '/wp-image-([\d]{1,4})/';
 	preg_match_all( $regex , $content , $matches );
 	$ids = isset( $matches[1] ) ? $matches[1] : '';
 	return $ids;
-}
-
-function bsg_get_post_content() {
-	global $post;
-	$content = isset( $post->post_content ) ? $post->post_content : '';
-	return $content;
 }
 
 function bsg_find_image_ids_attached_to_post() {
