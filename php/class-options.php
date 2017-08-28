@@ -53,7 +53,7 @@ class Options {
 	 *
 	 * @param object $plugin Instance of the plugin.
 	 */
-	function __construct( $plugin ) {
+	public function __construct( $plugin ) {
 		$this->plugin = $plugin;
 	}
 
@@ -62,7 +62,7 @@ class Options {
 	 *
 	 * @return void
 	 */
-	function init() {
+	public function init() {
 		add_action( 'admin_menu', array( $this, 'plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'settings_setup' ) );
 		add_filter( 'plugin_action_links', array( $this, 'add_settings_link' ), 2, 2 );
@@ -181,6 +181,15 @@ class Options {
 			$actions['settings'] = '<a href="options-general.php?page=bsg_options_page">' . esc_html__( 'Settings', 'bootstrap-swipe-gallery' ) . '</a>';
 		}
 		return $actions;
+	}
+
+	public function options_allow_carousel_for_all_post_images() {
+		$plugin_options = get_option( 'bsg_plugin_options' );
+		if ( isset( $plugin_options[ $this->carousel_option ] ) ) {
+			return ( '1' === $plugin_options[ $this->carousel_option ] );
+		} else {
+			return false;
+		}
 	}
 
 }

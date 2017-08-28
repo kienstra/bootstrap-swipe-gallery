@@ -63,7 +63,7 @@ class Modal_Carousel {
 	 *
 	 * @param string $id The ID of the carousel (optional).
 	 */
-	function __construct( $id = '' ) {
+	public function __construct( $id = '' ) {
 		$this->gallery_id = $id ? $id : 'gallery-' . self::$instance_id;
 		self::$instance_id++;
 	}

@@ -18,4 +18,6 @@ Author URI: www.ryankienstra.com
 License: GPL2
 */
 
-require_once dirname( __FILE__ ) . '/includes/class-plugin.php';
+require_once dirname( __FILE__ ) . '/php/class-plugin.php';
+$plugin = Plugin::get_instance();
+$plugin->init();

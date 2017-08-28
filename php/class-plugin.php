@@ -49,16 +49,34 @@ class Plugin {
 	}
 
 	/**
-	 * Instantiate the class.
+	 * Init the plugin.
 	 */
-	private function __construct() {
+	public function init() {
 		$this->load_files();
-		$this->instantiate_classes();
+		$this->init_classes();
 		register_activation_hook( __FILE__, array( $this, 'deactivate_if_early_wordpress_version' ) );
 		register_activation_hook( __FILE__, array( $this, 'activate_with_default_options' ) );
 		add_action( 'init', array( $this, 'textdomain' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'localize_asset' ) );
+	}
+
+	public function load_files() {
+		require_once __DIR__ . '/class-modal-carousel.php';
+		require_once __DIR__ . '/class-modal-setup.php';
+		require_once __DIR__ . '/class-options.php';
+	}
+
+	/**
+	 * Instantiate the plugin classes, and call their init() methods.
+	 *
+	 * @return void
+	 */
+	public function init_classes() {
+		$this->components['options'] = new Options( $this );
+		$this->components['modal_setup'] = new Modal_Setup( $this );
+		$this->components['options']->init();
+		$this->components['modal_setup']->init();
 	}
 
 	public function deactivate_if_early_wordpress_version() {
@@ -75,22 +93,6 @@ class Plugin {
 		load_plugin_textdomain( $this->slug );
 	}
 
-	public function load_files() {
-		require_once __DIR__ . '/class-modal-carousel.php';
-		require_once __DIR__ . '/gallery-modal-setup.php';
-		require_once __DIR__ . '/class-options.php';
-	}
-
-	/**
-	 * Instantiate the plugin classes, and call their init() methods.
-	 *
-	 * @return void
-	 */
-	public function init_classes() {
-		$this->components['options'] = new Option( $this );
-		$this->components['options']->init();
-	}
-
 	public function enqueue_assets() {
 		if ( isset( $post ) && $this->post_should_have_a_swipe_gallery( $post ) ) {
 			wp_enqueue_style( $this->slug . '-carousel', plugins_url( '/css/bsg-carousel.css', __FILE__ ), $this->version );
@@ -102,7 +104,7 @@ class Plugin {
 	}
 
 	public function localize_asset() {
-		$do_allow = ( $this->do_make_carousel_of_post_images() ) ? true : false;
+		$do_allow = ( $this->components['modal_setup']->do_make_carousel_of_post_images() ) ? true : false;
 		wp_localize_script(
 			$this->slug . '-modal-setup',
 			'bsg_do_allow',
@@ -113,32 +115,13 @@ class Plugin {
 	}
 
 	public function post_should_have_a_swipe_gallery() {
-		return ( $this->post_has_a_gallery() || $this->do_make_carousel_of_post_images() );
+		return ( $this->components['modal_setup']->post_has_a_gallery() || $this->components['modal_setup']->do_make_carousel_of_post_images() );
 	}
 
 	public function post_has_a_gallery() {
 		$galleries = get_post_galleries( get_post(), false );
 		if ( is_array( $galleries ) && ( ! array() === $galleries ) ) {
 			return true;
-		}
-	}
-
-	public function do_make_carousel_of_post_images() {
-		return (
-			( is_single() || is_page() )
-			&&
-			$this->options_allow_carousel_for_all_post_images()
-			&&
-			! empty( bsg_get_image_ids() )
-		);
-	}
-
-	public function options_allow_carousel_for_all_post_images() {
-		$plugin_options = get_option( 'bsg_plugin_options' );
-		if ( isset( $plugin_options[ $this->components['options']->carousel_option ] ) ) {
-			return ( '1' === $plugin_options[ $this->components['options']->carousel_option ] );
-		} else {
-			return false;
 		}
 	}
 
