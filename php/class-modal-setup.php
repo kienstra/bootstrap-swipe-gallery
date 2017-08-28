@@ -112,32 +112,38 @@ class Modal_Setup {
 		return isset( $matches[1] ) ? $matches[1] : null;
 	}
 
+	/**
+	 * Get the image IDs that are attached to a post.
+	 *
+	 * @return array|null $image_ids The IDs of images attached to the post, or null if there aren't any.
+	 */
 	function find_image_ids_attached_to_post() {
 		$attachments = $this->query_for_images_in_post();
-		return $this->get_image_ids_from( $attachments );
+		if ( empty( $attachments ) ) {
+			return null;
+		}
+		$image_ids = array();
+		foreach ( $attachments as $attachment ) {
+			array_push( $image_ids, $attachment->ID );
+		}
+		return $image_ids;
 	}
 
+	/**
+	 * Get a query for the images attached to the current post.
+	 *
+	 * @return array|null $query A query for images attachments.
+	 */
 	function query_for_images_in_post() {
-		$query = new WP_Query( array(
+		$query = new \WP_Query( array(
 			'post_type'      => 'attachment',
 			'posts_per_page' => 20,
-			'order'	         => 'ASC',
+			'order'          => 'ASC',
 			'orderby'        => 'menu_order',
 			'post_parent'    => get_the_ID(),
 			'post_mime_type' => 'image',
 		) );
 		return isset( $query->query ) ? $query->query : null;
-	}
-
-	function get_image_ids_from( $attachments ) {
-		$image_ids = array();
-		if ( empty( $attachments ) ) {
-			return;
-		}
-		foreach ( $attachments as $attachment ) {
-			array_push( $image_ids, $attachment->ID );
-		}
-		return $image_ids;
 	}
 
 }
