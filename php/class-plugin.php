@@ -138,9 +138,9 @@ class Plugin {
 		$do_allow = ( $this->components['modal_setup']->do_make_carousel_of_post_images() ) ? true : false;
 		wp_localize_script(
 			$this->slug . '-modal-setup',
-			'bsg_do_allow',
+			'bsgDoAllow',
 			array(
-				'post_image_carousels' => $do_allow,
+				'postImageCarousels' => $do_allow,
 			)
 		);
 	}
