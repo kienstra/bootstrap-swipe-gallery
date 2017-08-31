@@ -38,6 +38,14 @@ class Modal_Setup {
 		add_action( 'loop_end', array( $this, 'create_carousel' ) );
 	}
 
+	/**
+	 * For each image gallery on the page, output a carousel in a modal.
+	 *
+	 * Though the logic is similar to create_carousel, this is only for galleries.
+	 * This will only display on clicking a gallery image.
+	 *
+	 * @return void
+	 */
 	function create_galleries() {
 		$galleries = get_post_galleries( get_the_ID(), false );
 		foreach ( $galleries as $gallery ) {
@@ -48,7 +56,7 @@ class Modal_Setup {
 	/**
 	 * Output the modal carousel.
 	 *
-	 * @param array $image_ids The image IDs in the carousel, or none if there aren't any.
+	 * @param array  $image_ids The image IDs in the carousel, or none if there aren't any.
 	 * @param string $carousel_id ID of the carousel, optional.
 	 * @return string $markup The modal carousel markup.
 	 */
@@ -77,6 +85,14 @@ class Modal_Setup {
 		return explode( ',', $gallery['ids'] );
 	}
 
+	/**
+	 * Conditionally output a carousel of the post images.
+	 *
+	 * If the conditions are met, output modaal with a carousel of images.
+	 * Though the logic is similar to create_galleries(), this creates a modal for non-gallery post images.
+	 *
+	 * @return void
+	 */
 	function create_carousel() {
 		if ( $this->do_make_carousel_of_post_images() ) {
 			$this->echo_modal_carousel( $this->get_image_ids(), 'non-gallery' );

@@ -79,16 +79,19 @@ class Options {
 			__( 'Swipe Gallery', 'bootstrap-swipe-gallery' ),
 			'manage_options',
 			$this->plugin_options,
-			array( $this, 'plugin_options_page_text' )
+			array( $this, 'plugin_options_page' )
 		);
 	}
 
 	/**
 	 * Echo the markup for the plugin options page.
 	 *
+	 * This appears in 'Settings' > 'Swipe Gallery.'
+	 * And it controls whether to create a carousel for non-gallery post images.
+	 *
 	 * @return void
 	 */
-	public function plugin_options_page_text() {
+	public function plugin_options_page() {
 		?>
 		<div class="wrap">
 			<h2><?php esc_html_e( 'Bootstrap Swipe Gallery', 'bootstrap-swipe-gallery' ); ?></h2>
@@ -135,6 +138,9 @@ class Options {
 
 	/**
 	 * Output the markup for the carousel option.
+	 *
+	 * This displays in 'Settings' > 'Swipe Gallery.'
+	 * And it controls whether to create a carousel for all post images.
 	 *
 	 * @return void
 	 */
@@ -183,6 +189,15 @@ class Options {
 		return $actions;
 	}
 
+	/**
+	 * Whether the options allow a carouselsfor all post images.
+	 *
+	 * This gets the value of the option in 'Settings' > 'Swipe Gallery.'
+	 * Carousels of image galleries are supported by default.
+	 * But this option controls whether all images in a post should be in a modal carousel.
+	 *
+	 * @return bool $all_carousel_all_for_post_images Whether to output a carousel for all post images.
+	 */
 	public function options_allow_carousel_for_all_post_images() {
 		$plugin_options = get_option( 'bsg_plugin_options' );
 		if ( isset( $plugin_options[ $this->carousel_option ] ) ) {

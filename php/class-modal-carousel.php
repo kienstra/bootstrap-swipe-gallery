@@ -128,7 +128,7 @@ class Modal_Carousel {
 		if ( $this->number_of_images > 1 ) {
 			return
 				'<ol class="carousel-indicators">'
-					. $this->image_indicators
+					. wp_kses_post( $this->image_indicators )
 				. '</ol>
 				<a class="left carousel-control" href="#' . esc_attr( $this->gallery_id ) . '" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
 				<a class="right carousel-control" href="' . esc_attr( $this->gallery_id ) . '" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>';
@@ -145,7 +145,7 @@ class Modal_Carousel {
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content modal-content-gallery">
 					<div class="modal-header">
-						<a data-dismiss="modal" aria-hidden="true" href=""#">
+						<a data-dismiss="modal" aria-hidden="true" href="#">
 							<span class="glyphicon glyphicon-remove-circle"></span>
 						</a>
 					</div>
@@ -154,7 +154,7 @@ class Modal_Carousel {
 							<div class="carousel-inner">'
 								. $this->carousel_inner_items
 							. '</div>'
-							. $this->maybe_get_indicators_and_controls()
+							. wp_kses_post( $this->maybe_get_indicators_and_controls() )
 						. '</div>
 					</div>
 				</div>
