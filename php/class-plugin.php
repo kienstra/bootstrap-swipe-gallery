@@ -54,8 +54,7 @@ class Plugin {
 	public function init() {
 		$this->load_files();
 		$this->init_classes();
-		register_activation_hook( __FILE__, array( $this, 'deactivate_if_early_wordpress_version' ) );
-		register_activation_hook( __FILE__, array( $this, 'activate_with_default_options' ) );
+		register_activation_hook( __FILE__, array( $this, 'modal_option' ) );
 		add_action( 'init', array( $this, 'textdomain' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'localize_asset' ) );
@@ -79,16 +78,23 @@ class Plugin {
 		$this->components['modal_setup']->init();
 	}
 
-	public function deactivate_if_early_wordpress_version() {
-		if ( version_compare( get_bloginfo( 'version' ), '3.8', '<' ) ) {
-			deactivate_plugins( basename( __FILE__ ) );
-		}
-	}
-
-	public function activate_with_default_options() {
+	/**
+	 * Adds the option for whether to display modals for all images.
+	 *
+	 * And sets a default value.
+	 * This appears in 'Settings' > 'Swipe Gallery.'
+	 *
+	 * @return void
+	 */
+	public function modal_option() {
 		add_option( 'bsg_plugin_options', array( $this->components['options']->carousel_option, $this->components['options']->default_option ) );
 	}
 
+	/**
+	 * Load the plugin's textdomain.
+	 *
+	 * @return void
+	 */
 	public function textdomain() {
 		load_plugin_textdomain( $this->slug );
 	}

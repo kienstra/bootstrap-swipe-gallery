@@ -98,18 +98,21 @@ class Modal_Setup {
 		);
 	}
 
+	/**
+	 * Get the image IDs to display in the carousel.
+	 *
+	 * First, match the IDs that appear in the post content.
+	 * If this doesn't fiend IDs, get the image IDs that are attached to the post.
+	 *
+	 * @return array|null
+	 */
 	function get_image_ids() {
-		$image_ids = $this->traverse_post_content_for_image_ids();
-		if ( null === $image_ids ) {
-			return $this->find_image_ids_attached_to_post();
-		}
-		return $image_ids;
-	}
-
-	function traverse_post_content_for_image_ids() {
 		$regex = '/wp-image-([\d]{1,4})/';
 		preg_match_all( $regex, get_the_content(), $matches );
-		return isset( $matches[1] ) ? $matches[1] : null;
+		if ( isset( $matches[1] ) ) {
+			return $matches[1];
+		}
+		return $this->find_image_ids_attached_to_post();
 	}
 
 	/**
@@ -143,7 +146,7 @@ class Modal_Setup {
 			'post_parent'    => get_the_ID(),
 			'post_mime_type' => 'image',
 		) );
-		return isset( $query->query ) ? $query->query : null;
+		return $query->get_posts();
 	}
 
 }
