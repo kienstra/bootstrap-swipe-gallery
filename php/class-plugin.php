@@ -119,10 +119,10 @@ class Plugin {
 	 * @return void
 	 */
 	public function enqueue_assets() {
-		if ( isset( $post ) && $this->post_should_have_a_swipe_gallery( $post ) ) {
-			wp_enqueue_style( $this->slug . '-carousel', plugins_url( '/css/bsg-carousel.css', __FILE__ ), $this->version );
-			wp_enqueue_script( $this->slug . '-jquery-mobile-swipe', plugins_url( '/js/jquery.mobile.custom.min.js', __FILE__ ), array( 'jquery' ), $this->version, true );
-			wp_enqueue_script( $this->slug . '-modal-setup', plugins_url( '/js/gallery-modal.js', __FILE__ ), array( 'jquery', $this->slug . '-jquery-mobile-swipe' ), $this->version, true );
+		if ( $this->post_should_have_a_swipe_gallery() ) {
+			wp_enqueue_style( $this->slug . '-carousel', plugins_url( $this->slug . '/css/bsg-carousel.css' ), $this->version );
+			wp_enqueue_script( $this->slug . '-jquery-mobile-swipe', plugins_url( $this->slug . '/js/jquery.mobile.custom.min.js' ), array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->slug . '-modal-setup', plugins_url( $this->slug . '/js/gallery-modal.js' ), array( 'jquery', $this->slug . '-jquery-mobile-swipe' ), $this->version, true );
 		}
 	}
 
@@ -154,7 +154,7 @@ class Plugin {
 	 * @return bool $should_have_gallery
 	 */
 	public function post_should_have_a_swipe_gallery() {
-		return ( $this->components['modal_setup']->post_has_a_gallery() || $this->components['modal_setup']->do_make_carousel_of_post_images() );
+		return ( $this->post_has_a_gallery() || $this->components['modal_setup']->do_make_carousel_of_post_images() );
 	}
 
 	/**
@@ -164,9 +164,10 @@ class Plugin {
 	 */
 	public function post_has_a_gallery() {
 		$galleries = get_post_galleries( get_post(), false );
-		if ( is_array( $galleries ) && ( ! array() === $galleries ) ) {
+		if ( is_array( $galleries ) && ( array() !== $galleries ) ) {
 			return true;
 		}
+		return false;
 	}
 
 }
