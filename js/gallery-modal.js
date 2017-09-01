@@ -7,7 +7,7 @@
 
 		component.modalSelector = '.gallery-modal';
 
-		component.resetCarousel = function($carousel ) {
+		component.resetCarousel = function( $carousel ) {
 			var $carousel_inner = $carousel.find( '.carousel-inner' );
 
 			$carousel.carousel( 'pause' );
@@ -94,7 +94,6 @@
 
 		// @todo: debounce or reconsider this.
 		$( window ).resize( component.sizeContainingDivOfImage );
-
 
 	} );
 } )( jQuery );

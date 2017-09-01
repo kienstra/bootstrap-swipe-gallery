@@ -66,8 +66,8 @@ class Modal_Setup {
 		}
 		$modal_for_gallery = new Modal_Carousel( $carousel_id );
 		foreach ( $image_ids as $image_id ) {
-			$src_full_size = reset( wp_get_attachment_image_src( $image_id, 'full', false ) );
-			$modal_for_gallery->add_image( $src_full_size );
+			$attachment = wp_get_attachment_image_src( $image_id, 'full', false );
+			$modal_for_gallery->add_image( reset( $attachment ) );
 		}
 		echo wp_kses_post( $modal_for_gallery->get() );
 	}
