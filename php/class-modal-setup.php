@@ -64,12 +64,14 @@ class Modal_Setup {
 		if ( ( null === $image_ids ) || empty( $image_ids ) ) {
 			return;
 		}
-		$modal_for_gallery = new Modal_Carousel( $carousel_id );
+		$modal = new Modal_Carousel( $carousel_id );
 		foreach ( $image_ids as $image_id ) {
 			$attachment = wp_get_attachment_image_src( $image_id, 'full', false );
-			$modal_for_gallery->add_image( reset( $attachment ) );
+			if ( false !== $attachment ) {
+				$modal->add_image( reset( $attachment ) );
+			}
 		}
-		echo wp_kses_post( $modal_for_gallery->get() );
+		echo wp_kses_post( $modal->get() );
 	}
 
 	/**
@@ -108,7 +110,7 @@ class Modal_Setup {
 		return (
 			( is_single() || is_page() )
 			&&
-			$this->plugin->components['options']->options_allow_carousel_for_all_post_images()
+			$this->plugin->components['options']->allow_carousel_for_post_images()
 			&&
 			! empty( $this->get_image_ids() )
 		);

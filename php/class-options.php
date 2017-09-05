@@ -65,7 +65,7 @@ class Options {
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'plugin_page' ) );
 		add_action( 'admin_init', array( $this, 'settings_setup' ) );
-		add_filter( 'plugin_action_links', array( $this, 'add_settings_link' ), 2, 2 );
+		add_filter( 'plugin_action_links', array( $this, 'settings_link' ), 2, 2 );
 	}
 
 	/**
@@ -146,7 +146,7 @@ class Options {
 	 */
 	public function settings_display() {
 		$name = $this->plugin_options . '[' . $this->carousel_option . ']';
-		$options = get_option( $this->plugin_options );
+		$options = get_option( $this->plugin_options, $this->default_option );
 		$allow_carousel_all_posts = isset( $options[ $this->carousel_option ] ) ? $options[ $this->carousel_option ] : $this->default_option;
 		echo '<input type="checkbox" name="' . esc_attr( $name ) . '"' . checked( $allow_carousel_all_posts, '1', false ) . ' value="1"/>';
 	}
@@ -154,10 +154,10 @@ class Options {
 	/**
 	 * Validate the user input in the plugin option.
 	 *
-	 * @param string $input Option values, as input by user.
+	 * @param array $input Option values, as input by user.
 	 * @return array $validated Populated with the value from $input, if it's valid.
 	 */
-	public function plugin_validate_options( $input ) {
+	public function validate_options( $input ) {
 		$validated = array();
 		$is_valid = (
 			isset( $input[ $this->carousel_option ] )
@@ -182,7 +182,7 @@ class Options {
 	 * @param string $plugin_file The plugin file's path.
 	 * @return array $actions This plugin's actions, possibly including the new 'Settings' link.
 	 */
-	public function add_settings_link( $actions, $plugin_file ) {
+	public function settings_link( $actions, $plugin_file ) {
 		if ( false !== strpos( $plugin_file, $this->plugin->slug ) ) {
 			$actions['settings'] = '<a href="options-general.php?page=bsg_options_page">' . esc_html__( 'Settings', 'bootstrap-swipe-gallery' ) . '</a>';
 		}
@@ -190,7 +190,7 @@ class Options {
 	}
 
 	/**
-	 * Whether the options allow a carouselsfor all post images.
+	 * Whether the options allow a carousels for all post images.
 	 *
 	 * This gets the value of the option in 'Settings' > 'Swipe Gallery.'
 	 * Carousels of image galleries are supported by default.
@@ -198,8 +198,8 @@ class Options {
 	 *
 	 * @return bool $all_carousel_all_for_post_images Whether to output a carousel for all post images.
 	 */
-	public function options_allow_carousel_for_all_post_images() {
-		$plugin_options = get_option( 'bsg_plugin_options' );
+	public function allow_carousel_for_post_images() {
+		$plugin_options = get_option( $this->plugin_options );
 		if ( isset( $plugin_options[ $this->carousel_option ] ) ) {
 			return ( '1' === $plugin_options[ $this->carousel_option ] );
 		} else {

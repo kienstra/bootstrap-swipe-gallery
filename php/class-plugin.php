@@ -59,7 +59,6 @@ class Plugin {
 	public function init() {
 		$this->load_files();
 		$this->init_classes();
-		register_activation_hook( __FILE__, array( $this, 'modal_option' ) );
 		add_action( 'init', array( $this, 'textdomain' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'localize_asset' ) );
@@ -86,18 +85,6 @@ class Plugin {
 		$this->components['modal_setup'] = new Modal_Setup( $this );
 		$this->components['options']->init();
 		$this->components['modal_setup']->init();
-	}
-
-	/**
-	 * Adds the option for whether to display modals for all images.
-	 *
-	 * And sets a default value.
-	 * This appears in 'Settings' > 'Swipe Gallery.'
-	 *
-	 * @return void
-	 */
-	public function modal_option() {
-		add_option( 'bsg_plugin_options', array( $this->components['options']->carousel_option, $this->components['options']->default_option ) );
 	}
 
 	/**
@@ -135,12 +122,11 @@ class Plugin {
 	 * @return void
 	 */
 	public function localize_asset() {
-		$do_allow = ( $this->components['modal_setup']->do_make_carousel_of_post_images() ) ? true : false;
 		wp_localize_script(
 			$this->slug . '-modal-setup',
 			'bsgDoAllow',
 			array(
-				'postImageCarousels' => $do_allow,
+				'postImageCarousels' => intval( $this->components['modal_setup']->do_make_carousel_of_post_images() ),
 			)
 		);
 	}

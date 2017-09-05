@@ -1,8 +1,8 @@
 /* global bsgDoAllow */
 ( function( $ ) {
-	$( function() {
-		'use strict';
+	'use strict';
 
+	$( function() {
 		var component = {};
 
 		component.modalSelector = '.gallery-modal';
@@ -47,7 +47,7 @@
 		} );
 
 		// Shortcut the gallery entirely.
-		if ( 'undefined' !== typeof bsgDoAllow && true === bsgDoAllow.postImageCarousels ) {
+		if ( 'undefined' !== typeof bsgDoAllow && '1' === bsgDoAllow.postImageCarousels ) {
 			component.postSelector = '.post';
 			component.postCarouselSelector = '#non-gallery';
 			component.imageSelector = 'img:not(.thumbnail):not(.attachment-thumbnail):not(.attachment-post-thumbnail)';
