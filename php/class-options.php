@@ -120,7 +120,7 @@ class Options {
 	 * @return void
 	 */
 	public function settings_setup() {
-		register_setting( $this->plugin_options, $this->plugin_options, array( $this, 'plugin_validate_options' ) );
+		register_setting( $this->plugin_options, $this->plugin_options, array( $this, 'validate_options' ) );
 		add_settings_section(
 			'bsg_plugin_primary',
 			__( 'Settings', 'bootstrap-swipe-gallery' ),
