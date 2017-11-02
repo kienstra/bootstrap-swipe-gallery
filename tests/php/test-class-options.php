@@ -36,7 +36,7 @@ class Test_Class_Options extends \WP_UnitTestCase {
 	public function setUp() {
 		parent::setUp();
 		$this->plugin = Plugin::get_instance();
-		$this->instance = $this->plugin->components['options'];
+		$this->instance = $this->plugin->components->options;
 	}
 
 	/**

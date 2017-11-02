@@ -110,7 +110,7 @@ class Modal_Setup {
 		return (
 			( is_single() || is_page() )
 			&&
-			$this->plugin->components['options']->allow_carousel_for_post_images()
+			$this->plugin->components->options->allow_carousel_for_post_images()
 			&&
 			! empty( $this->get_image_ids() )
 		);

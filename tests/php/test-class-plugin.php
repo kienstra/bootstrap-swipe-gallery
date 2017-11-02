@@ -52,12 +52,10 @@ class Test_Class_Plugin extends \WP_UnitTestCase {
 		$this->plugin->init();
 		$this->assertTrue( class_exists( __NAMESPACE__ . '\Modal_Carousel' ) );
 
-		$this->assertEquals( __NAMESPACE__ . '\Modal_Setup', get_class( $this->plugin->components['modal_setup'] ) );
-		$this->assertEquals( __NAMESPACE__ . '\Options', get_class( $this->plugin->components['options'] ) );
+		$this->assertEquals( __NAMESPACE__ . '\Modal_Setup', get_class( $this->plugin->components->modal_setup ) );
+		$this->assertEquals( __NAMESPACE__ . '\Options', get_class( $this->plugin->components->options ) );
 
 		$this->assertEquals( 10, has_action( 'init', array( $this->plugin, 'textdomain' ) ) );
-		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $this->plugin, 'enqueue_assets' ) ) );
-		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $this->plugin, 'localize_asset' ) ) );
 	}
 
 	/**
@@ -78,10 +76,11 @@ class Test_Class_Plugin extends \WP_UnitTestCase {
 	 */
 	public function test_init_classes() {
 		$this->plugin->init_classes();
-		$this->assertEquals( __NAMESPACE__ . '\Modal_Setup', get_class( $this->plugin->components['modal_setup'] ) );
-		$this->assertEquals( __NAMESPACE__ . '\Options', get_class( $this->plugin->components['options'] ) );
-		$this->assertEquals( 10, has_action( 'loop_end', array( $this->plugin->components['modal_setup'], 'create_galleries' ) ) );
-		$this->assertEquals( 10, has_action( 'admin_menu', array( $this->plugin->components['options'], 'plugin_page' ) ) );
+		$this->assertEquals( __NAMESPACE__ . '\Assets', get_class( $this->plugin->components->assets ) );
+		$this->assertEquals( __NAMESPACE__ . '\Modal_Setup', get_class( $this->plugin->components->modal_setup ) );
+		$this->assertEquals( __NAMESPACE__ . '\Options', get_class( $this->plugin->components->options ) );
+		$this->assertEquals( 10, has_action( 'loop_end', array( $this->plugin->components->modal_setup, 'echo_galleries' ) ) );
+		$this->assertEquals( 10, has_action( 'admin_menu', array( $this->plugin->components->options, 'plugin_page' ) ) );
 	}
 
 }

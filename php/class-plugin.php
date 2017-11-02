@@ -81,10 +81,13 @@ class Plugin {
 	 * @return void
 	 */
 	public function init_classes() {
-		$this->components['options'] = new Options( $this );
-		$this->components['modal_setup'] = new Modal_Setup( $this );
-		$this->components['options']->init();
-		$this->components['modal_setup']->init();
+		$this->components = new \stdClass();
+		$this->components->options = new Options( $this );
+		$this->components->modal_setup = new Modal_Setup( $this );
+		$this->components->assets = new Assets( $this );
+		$this->components->options->init();
+		$this->components->modal_setup->init();
+		$this->components->assets->init();
 	}
 
 	/**
