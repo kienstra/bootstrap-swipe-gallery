@@ -34,7 +34,7 @@ class Modal_Setup {
 	 * @return void
 	 */
 	function init() {
-		add_action( 'loop_end', array( $this, 'create_galleries' ) );
+		add_action( 'loop_end', array( $this, 'echo_galleries' ) );
 		add_action( 'loop_end', array( $this, 'create_carousel' ) );
 	}
 
@@ -46,7 +46,7 @@ class Modal_Setup {
 	 *
 	 * @return void
 	 */
-	function create_galleries() {
+	function echo_galleries() {
 		$galleries = get_post_galleries( get_the_ID(), false );
 		foreach ( $galleries as $gallery ) {
 			$this->echo_modal_carousel( $this->get_image_ids_from_gallery( $gallery ) );
@@ -61,9 +61,6 @@ class Modal_Setup {
 	 * @return string $markup The modal carousel markup.
 	 */
 	function echo_modal_carousel( $image_ids, $carousel_id = '' ) {
-		if ( ( null === $image_ids ) || empty( $image_ids ) ) {
-			return;
-		}
 		$modal = new Modal_Carousel( $carousel_id );
 		foreach ( $image_ids as $image_id ) {
 			$attachment = wp_get_attachment_image_src( $image_id, 'full', false );
@@ -91,7 +88,7 @@ class Modal_Setup {
 	 * Conditionally output a carousel of the post images.
 	 *
 	 * If the conditions are met, output modaal with a carousel of images.
-	 * Though the logic is similar to create_galleries(), this creates a modal for non-gallery post images.
+	 * Though the logic is similar to echo_galleries(), this creates a modal for non-gallery post images.
 	 *
 	 * @return void
 	 */
@@ -127,7 +124,7 @@ class Modal_Setup {
 	function get_image_ids() {
 		$regex = '/wp-image-([\d]{1,4})/';
 		preg_match_all( $regex, get_the_content(), $matches );
-		if ( isset( $matches[1] ) ) {
+		if ( ! empty( $matches[1] ) ) {
 			return $matches[1];
 		}
 		return $this->find_image_ids_attached_to_post();

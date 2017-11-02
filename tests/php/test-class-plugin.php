@@ -64,6 +64,7 @@ class Test_Class_Plugin extends \WP_UnitTestCase {
 	 * @see Plugin::load_files().
 	 */
 	public function test_load_files() {
+		$this->assertTrue( class_exists( __NAMESPACE__ . '\Assets' ) );
 		$this->assertTrue( class_exists( __NAMESPACE__ . '\Modal_Carousel' ) );
 		$this->assertTrue( class_exists( __NAMESPACE__ . '\Modal_Setup' ) );
 		$this->assertTrue( class_exists( __NAMESPACE__ . '\Options' ) );

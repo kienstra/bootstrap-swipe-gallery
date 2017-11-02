@@ -1,6 +1,6 @@
 <?php
 /**
- * Instantiates the Bootstrap Swipe Gallery plugin
+ * Instantiates the Bootstrap Swipe Gallery Plugin
  *
  * @package BootstrapSwipeGallery
  */
