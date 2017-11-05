@@ -202,7 +202,7 @@ class Test_Class_Options extends \WP_UnitTestCase {
 		$filtered_actions = $this->instance->settings_link( array(), $incorrect_plugin_file );
 		$this->assertFalse( isset( $filtered_actions['settings'] ) );
 
-		$correct_plugin_file = $this->plugin->slug . '/' . $this->plugin->slug . '.php';
+		$correct_plugin_file = $this->plugin->location . '/' . $this->plugin->location . '.php';
 		$actions_with_settings = $this->instance->settings_link( array(), $correct_plugin_file );
 		$this->assertEquals( '<a href="options-general.php?page=bsg_options_page">Settings</a>', $actions_with_settings['settings'] );
 	}

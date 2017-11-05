@@ -183,7 +183,7 @@ class Options {
 	 * @return array $actions This plugin's actions, possibly including the new 'Settings' link.
 	 */
 	public function settings_link( $actions, $plugin_file ) {
-		if ( false !== strpos( $plugin_file, $this->plugin->slug ) ) {
+		if ( false !== strpos( $plugin_file, $this->plugin->location ) ) {
 			$actions['settings'] = '<a href="options-general.php?page=bsg_options_page">' . esc_html__( 'Settings', 'bootstrap-swipe-gallery' ) . '</a>';
 		}
 		return $actions;

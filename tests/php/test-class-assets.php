@@ -74,20 +74,20 @@ class Test_Class_Assets extends \WP_UnitTestCase {
 		$this->assertEquals( Assets::CAROUSEL_SLUG, $carousel_style->handle );
 		$this->assertEquals( array(), $carousel_style->deps );
 		$this->assertContains( '/css/bsg-carousel.css', $carousel_style->src );
-		$this->assertEquals( $this->instance->plugin->version, $carousel_style->ver );
+		$this->assertEquals( Plugin::VERSION, $carousel_style->ver );
 
 		$scripts = wp_scripts();
 		$mobile_swipe = $scripts->registered[ Assets::MOBILE_SWIPE_SLUG ];
 		$this->assertEquals( Assets::MOBILE_SWIPE_SLUG, $mobile_swipe->handle );
 		$this->assertEquals( array( 'jquery' ), $mobile_swipe->deps );
 		$this->assertContains( '/js/jquery.mobile.custom.min.js', $mobile_swipe->src );
-		$this->assertEquals( $this->instance->plugin->version, $mobile_swipe->ver );
+		$this->assertEquals( Plugin::VERSION, $mobile_swipe->ver );
 
 		$modal_setup = $scripts->registered[ Assets::MODAL_SETUP_SLUG ];
 		$this->assertEquals( Assets::MODAL_SETUP_SLUG, $modal_setup->handle );
 		$this->assertEquals( array( 'jquery', Assets::MOBILE_SWIPE_SLUG ), $modal_setup->deps );
 		$this->assertContains( '/js/gallery-modal.js', $modal_setup->src );
-		$this->assertEquals( $this->instance->plugin->version, $modal_setup->ver );
+		$this->assertEquals( Plugin::VERSION, $modal_setup->ver );
 	}
 
 	/**

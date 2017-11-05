@@ -11,20 +11,26 @@ namespace BootstrapSwipeGallery;
  * Main plugin class
  */
 class Plugin {
-
 	/**
 	 * Plugin version.
 	 *
 	 * @var string
 	 */
-	public $version = '1.0.4';
+	const VERSION = '1.0.4';
 
 	/**
 	 * Plugin slug.
 	 *
-	 * @var string
+	 * @const string
 	 */
-	public $slug = 'bootstrap-swipe-gallery';
+	const SLUG = 'bootstrap-swipe-gallery';
+
+	/**
+	 * URL of the plugin.
+	 *
+	 * @var object
+	 */
+	public $location;
 
 	/**
 	 * Instantiated plugin classes.
@@ -59,6 +65,7 @@ class Plugin {
 	public function init() {
 		$this->load_files();
 		$this->init_classes();
+		$this->location = plugins_url( self::SLUG );
 		add_action( 'init', array( $this, 'textdomain' ) );
 	}
 
@@ -95,7 +102,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function textdomain() {
-		load_plugin_textdomain( $this->slug );
+		load_plugin_textdomain( Plugin::SLUG );
 	}
 
 }

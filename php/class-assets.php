@@ -90,9 +90,9 @@ class Assets {
 	 * @return void
 	 */
 	public function register_assets() {
-		wp_register_style( self::CAROUSEL_SLUG, plugins_url( $this->plugin->slug . '/css/bsg-carousel.css' ), array(), $this->plugin->version );
-		wp_register_script( self::MOBILE_SWIPE_SLUG, plugins_url( $this->plugin->slug . '/js/jquery.mobile.custom.min.js' ), array( 'jquery' ), $this->plugin->version, true );
-		wp_register_script( self::MODAL_SETUP_SLUG, plugins_url( $this->plugin->slug . '/js/gallery-modal.js' ), array( 'jquery', self::MOBILE_SWIPE_SLUG ), $this->plugin->version, true );
+		wp_register_style( self::CAROUSEL_SLUG, $this->plugin->location . '/css/bsg-carousel.css', array(), Plugin::VERSION );
+		wp_register_script( self::MOBILE_SWIPE_SLUG, $this->plugin->location . '/js/jquery.mobile.custom.min.js', array( 'jquery' ), Plugin::VERSION, true );
+		wp_register_script( self::MODAL_SETUP_SLUG, $this->plugin->location . '/js/gallery-modal.js', array( 'jquery', self::MOBILE_SWIPE_SLUG ), Plugin::VERSION, true );
 	}
 
 	/**
