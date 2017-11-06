@@ -13,7 +13,6 @@ namespace BootstrapSwipeGallery;
  * @package BootstrapSwipeGallery
  */
 class Test_Class_Options extends \WP_UnitTestCase {
-
 	/**
 	 * Instance of plugin.
 	 *

@@ -104,5 +104,4 @@ class Plugin {
 	public function textdomain() {
 		load_plugin_textdomain( Plugin::SLUG );
 	}
-
 }

@@ -11,7 +11,6 @@ namespace BootstrapSwipeGallery;
  * Assets class.
  */
 class Assets {
-
 	/**
 	 * Instance of the plugin.
 	 *
@@ -130,5 +129,4 @@ class Assets {
 		}
 		return false;
 	}
-
 }

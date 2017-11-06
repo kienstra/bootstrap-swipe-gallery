@@ -11,7 +11,6 @@ namespace BootstrapSwipeGallery;
  * Builds and echoes a modal carousel for each gallery.
  */
 class Modal_Carousel {
-
 	/**
 	 * ID of the gallery.
 	 *
@@ -124,7 +123,7 @@ class Modal_Carousel {
 	 *
 	 * @return string $markup Indicator and control markup.
 	 */
-	public function maybe_get_indicators_and_controls() {
+	public function controls() {
 		if ( $this->number_of_images > 1 ) {
 			return
 				'<ol class="carousel-indicators">'
@@ -142,7 +141,7 @@ class Modal_Carousel {
 	 */
 	public function get() {
 		ob_start();
-		require_once __DIR__ . '/templates/carousel.php';
+		require __DIR__ . '/templates/carousel.php';
 		return ob_get_clean();
 	}
 }

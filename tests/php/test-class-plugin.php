@@ -13,7 +13,6 @@ namespace BootstrapSwipeGallery;
  * @package BootstrapSwipeGallery
  */
 class Test_Class_Plugin extends \WP_UnitTestCase {
-
 	/**
 	 * Instance of plugin.
 	 *
@@ -83,5 +82,4 @@ class Test_Class_Plugin extends \WP_UnitTestCase {
 		$this->assertEquals( 10, has_action( 'loop_end', array( $this->plugin->components->modal_setup, 'echo_galleries' ) ) );
 		$this->assertEquals( 10, has_action( 'admin_menu', array( $this->plugin->components->options, 'plugin_page' ) ) );
 	}
-
 }

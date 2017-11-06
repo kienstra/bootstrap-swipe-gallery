@@ -11,7 +11,6 @@ namespace BootstrapSwipeGallery;
  * Adds an options page.
  */
 class Options {
-
 	/**
 	 * Instance of the plugin.
 	 *
@@ -206,5 +205,4 @@ class Options {
 			return false;
 		}
 	}
-
 }

@@ -11,7 +11,6 @@ namespace BootstrapSwipeGallery;
  * Set up a modal carousel for every gallery.
  */
 class Modal_Setup {
-
 	/**
 	 * Instance of the plugin.
 	 *
@@ -163,5 +162,4 @@ class Modal_Setup {
 		) );
 		return $query->get_posts();
 	}
-
 }

@@ -49,7 +49,7 @@ class Test_Class_Assets extends \WP_UnitTestCase {
 	public function test_init() {
 		$this->instance->init();
 		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $this->instance, 'enqueue_assets' ) ) );
-		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $this->instance, 'localize_asset' ) ) );
+		$this->assertEquals( 10, has_action( 'wp_enqueue_scripts', array( $this->instance, 'inline_script' ) ) );
 	}
 
 	/**
@@ -96,12 +96,11 @@ class Test_Class_Assets extends \WP_UnitTestCase {
 	 * @see Assets::localize_asset()
 	 * @return void
 	 */
-	public function test_localize_asset() {
+	public function test_inline_script() {
 		$this->create_post_without_gallery();
 		do_action( 'wp_enqueue_scripts' );
-		$data = wp_scripts()->registered[ Assets::MODAL_SETUP_SLUG ]->extra['data'];
-		$this->assertContains( 'bsgDoAllow', $data );
-		$this->assertContains( 'postImageCarousels', $data );
+		$data = wp_scripts()->registered[ Assets::MODAL_SETUP_SLUG ]->extra['after'];
+		$this->assertContains( 'bsgGalleryModal', end( $data ) );
 	}
 
 	/**

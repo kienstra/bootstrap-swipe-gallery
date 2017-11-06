@@ -21,7 +21,7 @@ namespace BootstrapSwipeGallery;
 					<div class="carousel-inner">
 						<?php echo wp_kses_post( $this->carousel_inner_items ); ?>
 					</div>
-					<?php echo wp_kses_post( $this->maybe_get_indicators_and_controls() ); ?>
+					<?php echo wp_kses_post( $this->controls() ); ?>
 				</div>
 			</div>
 		</div>
