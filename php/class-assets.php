@@ -108,7 +108,7 @@ class Assets {
 			sprintf(
 				'bsgGalleryModal.init( %s );',
 				wp_json_encode( array(
-					'postImageCarousels' => intval( $this->plugin->components->modal_setup->do_make_carousel_of_post_images() ),
+					'postImageCarousels' => intval( $this->plugin->components->modal_setup->do_make_carousel() ),
 				) )
 			)
 		);
@@ -125,7 +125,7 @@ class Assets {
 	public function has_swipe_gallery() {
 		$post = get_post();
 		if ( isset( $post->post_content ) ) {
-			return ( has_shortcode( $post->post_content, 'gallery' ) || $this->plugin->components->modal_setup->do_make_carousel_of_post_images() );
+			return ( has_shortcode( $post->post_content, 'gallery' ) || $this->plugin->components->modal_setup->do_make_carousel() );
 		}
 		return false;
 	}

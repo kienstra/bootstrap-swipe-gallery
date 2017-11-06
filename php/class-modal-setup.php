@@ -104,7 +104,7 @@ class Modal_Setup {
 	 * @return void
 	 */
 	function create_carousel() {
-		if ( $this->do_make_carousel_of_post_images() ) {
+		if ( $this->do_make_carousel() ) {
 			$this->echo_modal_carousel( $this->get_image_ids(), 'non-gallery' );
 		}
 	}
@@ -114,7 +114,7 @@ class Modal_Setup {
 	 *
 	 * @return bool $make_carousel Whether to make a carousel.
 	 */
-	public function do_make_carousel_of_post_images() {
+	public function do_make_carousel() {
 		return (
 			( is_single() || is_page() )
 			&&

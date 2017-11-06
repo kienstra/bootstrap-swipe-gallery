@@ -47,17 +47,6 @@ class Modal_Carousel {
 	public $number_of_images = 0;
 
 	/**
-	 * The id of the carousel.
-	 *
-	 * Based on a 1-index.
-	 * Increments 1 for each carousel (instance of this class).
-	 * To track how many carousels are on the page.
-	 *
-	 * @var integer
-	 */
-	public static $instance_id = 1;
-
-	/**
 	 * Modal_Carousel constructor.
 	 *
 	 * @param string $gallery_id The ID of the carousel (optional).
