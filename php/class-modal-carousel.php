@@ -60,11 +60,10 @@ class Modal_Carousel {
 	/**
 	 * Modal_Carousel constructor.
 	 *
-	 * @param string $id The ID of the carousel (optional).
+	 * @param string $gallery_id The ID of the carousel (optional).
 	 */
-	public function __construct( $id = '' ) {
-		$this->gallery_id = $id ? $id : 'gallery-' . self::$instance_id;
-		self::$instance_id++;
+	public function __construct( $gallery_id ) {
+		$this->gallery_id = $gallery_id;
 	}
 
 	/**
@@ -125,12 +124,9 @@ class Modal_Carousel {
 	 */
 	public function controls() {
 		if ( $this->number_of_images > 1 ) {
-			return
-				'<ol class="carousel-indicators">'
-					. wp_kses_post( $this->image_indicators )
-				. '</ol>
-				<a class="left carousel-control" href="#' . esc_attr( $this->gallery_id ) . '" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-				<a class="right carousel-control" href="' . esc_attr( $this->gallery_id ) . '" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>';
+			ob_start();
+			require __DIR__ . '/templates/controls.php';
+			return ob_get_clean();
 		}
 	}
 

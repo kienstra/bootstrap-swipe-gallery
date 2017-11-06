@@ -19,6 +19,16 @@ class Modal_Setup {
 	public $plugin;
 
 	/**
+	 * Count of the carousels on the page.
+	 *
+	 * Based on a 1-index.
+	 * Increments for each carousel (instance of this class).
+	 *
+	 * @var object
+	 */
+	public $carousel_count = 1;
+
+	/**
 	 * Options constructor.
 	 *
 	 * @param object $plugin Instance of the plugin.
@@ -60,7 +70,9 @@ class Modal_Setup {
 	 * @return void
 	 */
 	function echo_modal_carousel( $image_ids, $carousel_id = '' ) {
-		$modal = new Modal_Carousel( $carousel_id );
+		$id = ! empty( $carousel_id ) ? $carousel_id : $this->carousel_count;
+		$modal = new Modal_Carousel( 'gallery-' . $id );
+		$this->carousel_count++;
 		foreach ( $image_ids as $image_id ) {
 			$attachment = wp_get_attachment_image_src( $image_id, 'full', false );
 			if ( false !== $attachment ) {
