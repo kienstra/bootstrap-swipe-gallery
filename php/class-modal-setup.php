@@ -104,8 +104,9 @@ class Modal_Setup {
 	 * @return void
 	 */
 	function create_carousel() {
-		if ( $this->do_make_carousel() ) {
-			$this->echo_modal_carousel( $this->get_image_ids(), 'non-gallery' );
+		$image_ids = $this->get_image_ids();
+		if ( $this->do_make_carousel() & ! empty( $image_ids ) ) {
+			$this->echo_modal_carousel( $image_ids, 'non-gallery' );
 		}
 	}
 
