@@ -1,90 +1,121 @@
-( function( $ ) {
-	$( function() {
-		// When a gallery image is clicked, open the modal carousel that was built by gallery-modal-setup.php
-		$( '.gallery-item' ).on('click' , function( event ) {
-			var $parent_gallery = $( this ).parents( '.gallery' );
-			var gallery_ordinal = $parent_gallery.parents( '.post' ).find( '.gallery' ).index( $parent_gallery );
-			var image_index = $( this ).parents( '.gallery' ).find( '.gallery-item' ).index( this );
-			var $bsg_modal_carousel = $( '.bsg.gallery-modal' ).eq( gallery_ordinal );
-			open_modal_carousel_with_image( $bsg_modal_carousel , image_index );
-			return false;
-		} );
+/* exported bsgGalleryModal */
+var bsgGalleryModal = ( function( $ ) {
+	'use strict';
 
-		// shortcut the galllery entirely
-		if ( bsg_do_allow && bsg_do_allow.post_image_carousels ) { // inserted through wp_localize_script
-			var post_selector = '.post';
-			var post_carousel_selector = '#non-gallery';
-			var image_selector = 'img:not(.thumbnail):not(.attachment-thumbnail):not(.attachment-post-thumbnail)';
+	var component = {
+		/**
+		 * Module data.
+		 */
+		data: {},
 
-			var post_image_regex = /wp-image-[\d]{1,4}/; // should insert with wp_localize_script ?
-			var $old_non_gallery_images_in_post = $( post_selector ).filter( function() {
-				return this.className.match( post_image_regex );
-			} );
+		modalSelector: '.gallery-modal',
 
-			$( post_selector ).find( image_selector ).on( 'click' , function() {
-				if ( $( this ).parents( '.gallery-item' ).length > 0 ) {
-					return $( this ); // this is actually a gallery item , so return
-				}
-				var $modal_carousel = $( post_carousel_selector );
-				var post_image_index = $( this ).parents( post_selector ).find( image_selector ).index( this );
-				open_modal_carousel_with_image( $modal_carousel , post_image_index );
-				return false;
-			} );
-		}
+		resetCarousel: function( $carousel ) {
+			var $carouselInner = $carousel.find( '.carousel-inner' );
 
-		function open_modal_carousel_with_image( $modal_carousel , image_index ) {
-			var $carousel = $modal_carousel.find( '.carousel-gallery' );
-			reset_carousel( $carousel );
-
-			// Set the image in the modal carousel to "active" so it appears when it opens
-			$carousel.find( '.carousel-inner .item' ).eq( image_index ).addClass( 'active' );
-			$carousel.find( '.carousel-indicators li' ).eq( image_index ).addClass( 'active' );
-			$carousel.carousel( { interval : false } );
-			$modal_carousel.modal();
-		}
-
-		$( '.carousel .left' ).on( 'click' , function() {
-			$( this ).parents( '.carousel' ).carousel( 'prev' );
-			return false;
-		} );
-
-		$( '.carousel .right' ).on( 'click' , function() {
-			$( this ).parents( '.carousel' ).carousel( 'next' );
-			return false;
-		} );
-
-		$( '.carousel-indicators li' ).on( 'click' , function() {
-			var slide_to = $( this ).data( 'slide-to' );
-			$( this ).parents( '.carousel' ).carousel( slide_to );
-			return false;
-		} );
-
-		function reset_carousel( $carousel ) {
 			$carousel.carousel( 'pause' );
 			$carousel.find( '.carousel-indicators .active' ).removeClass( 'active' );
-			var $carousel_inner = $carousel.find( '.carousel-inner' );
-			$carousel_inner.find( '.item.active' ).removeClass( 'active' );
-			$carousel_inner.find( '.item.next' ).removeClass( 'next' );
-			$carousel_inner.find( '.item.left' ).removeClass( 'left' );
-		}
+			$carouselInner.find( '.item.active' ).removeClass( 'active' );
+			$carouselInner.find( '.item.next' ).removeClass( 'next' );
+			$carouselInner.find( '.item.left' ).removeClass( 'left' );
+		},
 
-		// Swipe support
-		$( '.gallery-modal' ).swiperight( function() {
-			$( this ).carousel( 'prev' );
-		} );
+		openModal: function( $modalCarousel, imageIndex ) {
+			var $carousel = $modalCarousel.find( '.carousel-gallery' );
+			component.resetCarousel( $carousel );
 
-		$( '.gallery-modal' ).swipeleft(function() {
-			$( this ).carousel( 'next' );
-		} );
+			// Set the image in the modal carousel to "active" so it appears when it opens
+			$carousel.find( '.carousel-inner .item' ).eq( imageIndex ).addClass( 'active' );
+			$carousel.find( '.carousel-indicators li' ).eq( imageIndex ).addClass( 'active' );
+			$carousel.carousel( { interval: false } );
+			$modalCarousel.modal();
+		},
 
-		size_containing_div_of_image();
-		$( window ).resize( size_containing_div_of_image );
+		sizeContainer: function() {
+			$( '.gallery-modal .carousel.carousel-gallery .carousel-inner .item' ).css( 'height', function() {
+				var heightMultiple = 0.8;
+				return heightMultiple * $( window ).height();
+			} );
+		},
 
-		function size_containing_div_of_image() {
-			$( '.gallery-modal .carousel.carousel-gallery .carousel-inner .item' ).css( 'height' , function() {
-				return ( 0.8 * $( window ).height() );
+		addHandlers: function() {
+			/**
+			 * On clicking a gallery image, open the modal carousel by
+			 *
+			 * @see gallery-modal-setup.php for the markup of this carousel.
+			 */
+			$( '.gallery-item' ).on( 'click', function() {
+				var $parentGallery = $( this ).parents( '.gallery' ),
+					ordinal = $parentGallery.parents( '.post' ).find( '.gallery' ).index( $parentGallery ),
+					index = $( this ).parents( '.gallery' ).find( '.gallery-item' ).index( this ),
+					$modal = $( '.bsg.gallery-modal' ).eq( ordinal );
+
+				component.openModal( $modal, index );
+				return false;
+			} );
+
+			/**
+			 * Shortcut the gallery entirely.
+			 */
+			if ( 'undefined' !== typeof bsgDoAllow && '1' === component.data.postImageCarousels ) {
+				component.postSelector = '.post';
+				component.postCarouselSelector = '#non-gallery';
+				component.imageSelector = 'img:not(.thumbnail):not(.attachment-thumbnail):not(.attachment-post-thumbnail)';
+
+				$( component.postSelector ).find( component.imageSelector ).on( 'click', function() {
+					var $modalCarousel = $( component.postCarouselSelector ),
+						postImageIndex = $( this ).parents( component.postSelector ).find( component.imageSelector ).index( this );
+					// If this is a gallery item, return early.
+					if ( 0 < $( this ).parents( '.gallery-item' ).length ) {
+						return $( this );
+					}
+					component.openModal( $modalCarousel, postImageIndex );
+					return false;
+				} );
+			}
+
+			$( '.carousel .left' ).on( 'click', function() {
+				$( this ).parents( '.carousel' ).carousel( 'prev' );
+				return false;
+			} );
+
+			$( '.carousel .right' ).on( 'click', function() {
+				$( this ).parents( '.carousel' ).carousel( 'next' );
+				return false;
+			} );
+
+			$( '.carousel-indicators li' ).on( 'click', function() {
+				var slideTo = $( this ).data( 'slide-to' );
+				$( this ).parents( '.carousel' ).carousel( slideTo );
+				return false;
+			} );
+
+			// On swiping right, go to the previous image.
+			$( component.modalSelector ).swiperight( function() {
+				$( this ).carousel( 'prev' );
+			} );
+
+			// On swiping left, go to the next image.
+			$( component.modalSelector ).swipeleft(function() {
+				$( this ).carousel( 'next' );
 			} );
 		}
+	};
 
-	} );
+	return {
+		 /**
+		  * Init module.
+		 *
+		 * @param {Object} data Object data.
+		 * @return {void}
+		 */
+		init: function( data ) {
+			component.data = data;
+			$( document ).ready( function() {
+				component.addHandlers();
+				component.sizeContainer();
+			} );
+		}
+	};
+
 } )( jQuery );

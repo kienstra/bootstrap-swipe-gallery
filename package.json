@@ -1,0 +1,22 @@
+{
+  "name": "bootstrap-swipe-gallery",
+  "version": "1.0.5",
+  "description": "Swipe through your WordPress galleries.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kienstra/bootstrap-swipe-gallery.git"
+  },
+  "author": "Ryan Kienstra",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/kienstra/bootstrap-swipe-gallery/issues"
+  },
+  "homepage": "https://github.com/kienstra/bootstrap-swipe-gallery#readme",
+  "devDependencies": {
+    "eslint": "^4.5.0"
+  }
+}
