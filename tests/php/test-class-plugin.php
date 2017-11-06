@@ -38,12 +38,11 @@ class Test_Class_Plugin extends \WP_UnitTestCase {
 	public function test_get_instance() {
 		$this->assertEquals( Plugin::get_instance(), $this->plugin );
 		$this->assertEquals( __NAMESPACE__ . '\Plugin', get_class( Plugin::get_instance() ) );
-		$this->assertEquals( '1.0.4', Plugin::VERSION );
 		$this->assertEquals( plugins_url( Plugin::SLUG ), $this->plugin->location );
 	}
 
 	/**
-	 * Test init().p
+	 * Test init().
 	 *
 	 * @see Plugin::init().
 	 */
