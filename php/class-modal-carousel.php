@@ -141,25 +141,8 @@ class Modal_Carousel {
 	 * @return string $markup The full carousel markup.
 	 */
 	public function get() {
-		return '<div id="' . esc_attr( $this->gallery_id ) . '" class="gallery-modal bsg modal fade">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content modal-content-gallery">
-					<div class="modal-header">
-						<a data-dismiss="modal" aria-hidden="true" href="#">
-							<span class="glyphicon glyphicon-remove-circle"></span>
-						</a>
-					</div>
-					<div class="modal-body">
-						<div id="carousel-' . esc_attr( $this->gallery_id ) . '" class="carousel bsg carousel-gallery">
-							<div class="carousel-inner">'
-								. $this->carousel_inner_items
-							. '</div>'
-							. wp_kses_post( $this->maybe_get_indicators_and_controls() )
-						. '</div>
-					</div>
-				</div>
-			</div>
-		</div>';
+		ob_start();
+		require_once __DIR__ . '/templates/carousel.php';
+		return ob_get_clean();
 	}
-
 }

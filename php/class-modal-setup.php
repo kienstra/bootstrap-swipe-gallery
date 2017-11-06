@@ -58,7 +58,7 @@ class Modal_Setup {
 	 *
 	 * @param array  $image_ids The image IDs in the carousel, or none if there aren't any.
 	 * @param string $carousel_id ID of the carousel, optional.
-	 * @return string $markup The modal carousel markup.
+	 * @return void
 	 */
 	function echo_modal_carousel( $image_ids, $carousel_id = '' ) {
 		$modal = new Modal_Carousel( $carousel_id );
