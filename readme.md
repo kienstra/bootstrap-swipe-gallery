@@ -70,7 +70,7 @@ Create a gallery in a post or page. Click "New Post," "Add Media," and "Create G
 ## Upgrade Notice ##
 
 ### 1.0.5 ###
-This version has some security improvements.
+Security improvements.
 
 ### 1.0.4 ###
 Stability fix: Only 20 images per pop-up.
