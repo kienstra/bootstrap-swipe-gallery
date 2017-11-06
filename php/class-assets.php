@@ -59,7 +59,7 @@ class Assets {
 	 */
 	public function init() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'localize_asset' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'inline_script' ) );
 	}
 
 	/**
@@ -96,19 +96,21 @@ class Assets {
 	}
 
 	/**
-	 * Localize a value for the main JavaScript file.
+	 * Initiate and the main JavaScript module.
 	 *
 	 * The file needs access to a value for whether or not it should make a carousel of all post images.
 	 * If this is true, clicking an image will trigger opening a modal with a carousel.
 	 *
 	 * @return void
 	 */
-	public function localize_asset() {
-		wp_localize_script(
+	public function inline_script() {
+		wp_add_inline_script(
 			self::MODAL_SETUP_SLUG,
-			'bsgDoAllow',
-			array(
-				'postImageCarousels' => intval( $this->plugin->components->modal_setup->do_make_carousel_of_post_images() ),
+			sprintf(
+				'bsgGalleryModal.init( %s );',
+				wp_json_encode( array(
+					'postImageCarousels' => intval( $this->plugin->components->modal_setup->do_make_carousel_of_post_images() ),
+				) )
 			)
 		);
 	}
