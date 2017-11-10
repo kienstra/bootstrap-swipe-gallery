@@ -19,7 +19,7 @@ namespace BootstrapSwipeGallery;
 			<div class="modal-body">
 				<div id="carousel-<?php echo esc_attr( $this->gallery_id ); ?>" class="carousel bsg carousel-gallery">
 					<div class="carousel-inner">
-						<?php echo wp_kses_post( $this->carousel_inner_items ); ?>
+						<?php echo wp_kses_post( $this->inner_items ); ?>
 					</div>
 					<?php echo wp_kses_post( $this->controls() ); ?>
 				</div>

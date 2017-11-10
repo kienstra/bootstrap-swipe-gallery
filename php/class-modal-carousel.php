@@ -8,7 +8,7 @@
 namespace BootstrapSwipeGallery;
 
 /**
- * Builds and echoes a modal carousel for each gallery.
+ * Builds and returns the modal carousel markup for each gallery.
  */
 class Modal_Carousel {
 	/**
@@ -23,14 +23,14 @@ class Modal_Carousel {
 	 *
 	 * @var string
 	 */
-	public $carousel_inner_items;
+	public $inner_items;
 
 	/**
 	 * Markup of the image indicators.
 	 *
 	 * @var string
 	 */
-	public $image_indicators = '';
+	public $indicators = '';
 
 	/**
 	 * Index of the image.
@@ -61,12 +61,12 @@ class Modal_Carousel {
 	 * Add to the markup in the inner items and the indicators (like breadcrumbs).
 	 * And increment the number of images in the carousel.
 	 *
-	 * @param string $image_src_full_size URL of the full-size image.
+	 * @param string $image_src URL of the full-size image.
 	 * @return void
 	 */
-	public function add_image( $image_src_full_size ) {
-		$this->append_image_to_inner_items( $image_src_full_size );
-		$this->append_to_indicators( $image_src_full_size );
+	public function add_image( $image_src ) {
+		$this->append_to_inner_items( $image_src );
+		$this->append_to_indicators( $image_src );
 		$this->number_of_images++;
 	}
 
@@ -76,15 +76,15 @@ class Modal_Carousel {
 	 * This is the markup, as it'll appear in the carousel.
 	 * Add an 'active' class if it's the first in the carousel.
 	 *
-	 * @param string $image_src_full_size URL of the image.
+	 * @param string $image_src URL of the image.
 	 * @return void
 	 */
-	public function append_image_to_inner_items( $image_src_full_size ) {
-		$active_class = ( 0 === $this->slide_to_index ) ? 'active' : '';
+	public function append_to_inner_items( $image_src ) {
+		$active_class = ( 0 === $this->slide_to_index ) ? ' active' : '';
 
-		$this->carousel_inner_items .=
-		'<div class="item ' . esc_attr( $active_class ) . '">
-			<img src="' . esc_attr( $image_src_full_size ) . '">
+		$this->inner_items .=
+		'<div class="item' . esc_attr( $active_class ) . '">
+			<img src="' . esc_attr( $image_src ) . '">
 		</div>';
 	}
 
@@ -94,12 +94,11 @@ class Modal_Carousel {
 	 * These indicators are like breadcrumbs.
 	 * Clicking them will scroll the carousel to the image.
 	 *
-	 * @param string $image_src_full_size URL of the image.
 	 * @return void
 	 */
-	public function append_to_indicators( $image_src_full_size ) {
-		$is_active = ( 0 === $this->slide_to_index ) ? 'active' : '';
-		$this->image_indicators .= '<li class="' . esc_attr( $is_active ) . '" data-target="#' . esc_attr( $this->gallery_id ) . '" data-slide-to="' . $this->slide_to_index . '" data-src="' . esc_url( $image_src_full_size ) . '"></li>';
+	public function append_to_indicators() {
+		$is_active = ( 0 === $this->slide_to_index );
+		$this->indicators .= $is_active ? '<li class="active"></li>' : '<li></li>';
 		$this->slide_to_index++;
 	}
 

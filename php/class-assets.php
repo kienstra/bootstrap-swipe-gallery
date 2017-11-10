@@ -95,7 +95,7 @@ class Assets {
 	}
 
 	/**
-	 * Initiate and the main JavaScript module.
+	 * Initiate the main JavaScript module.
 	 *
 	 * The file needs access to a value for whether or not it should make a carousel of all post images.
 	 * If this is true, clicking an image will trigger opening a modal with a carousel.
