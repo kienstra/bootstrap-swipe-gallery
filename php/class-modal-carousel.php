@@ -66,7 +66,7 @@ class Modal_Carousel {
 	 */
 	public function add_image( $image_src_full_size ) {
 		$this->append_image_to_inner_items( $image_src_full_size );
-		$this->append_to_carousel_indicators( $image_src_full_size );
+		$this->append_to_indicators( $image_src_full_size );
 		$this->number_of_images++;
 	}
 
@@ -97,7 +97,7 @@ class Modal_Carousel {
 	 * @param string $image_src_full_size URL of the image.
 	 * @return void
 	 */
-	public function append_to_carousel_indicators( $image_src_full_size ) {
+	public function append_to_indicators( $image_src_full_size ) {
 		$is_active = ( 0 === $this->slide_to_index ) ? 'active' : '';
 		$this->image_indicators .= '<li class="' . esc_attr( $is_active ) . '" data-target="#' . esc_attr( $this->gallery_id ) . '" data-slide-to="' . $this->slide_to_index . '" data-src="' . esc_url( $image_src_full_size ) . '"></li>';
 		$this->slide_to_index++;
